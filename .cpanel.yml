@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/l0uuh4oe1kwk/repositories/jvn_tracking
+    - /bin/cp * $DEPLOYPATH
