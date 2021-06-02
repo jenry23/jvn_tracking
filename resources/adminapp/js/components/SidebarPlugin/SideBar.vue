@@ -34,7 +34,7 @@
         <li class="nav-item">
           <a href="#" class="nav-link" @click.prevent="logout">
             <i class="material-icons">power_settings_new</i>
-            <p>{{ $t('global.logout') }}</p>
+            <p>Logout</p>
           </a>
         </li>
       </ul>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import * as fb from '../../firebase'
 export default {
   props: {
     title: {
@@ -99,9 +100,7 @@ export default {
   },
   methods: {
     logout() {
-      axios
-        .request({ baseURL: '/', url: 'logout', method: 'post' })
-        .then(() => location.assign('/'))
+      fb.auth.signOut().then(() => location.assign('/'))
     }
   }
 }

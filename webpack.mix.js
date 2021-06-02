@@ -13,15 +13,15 @@ const mix = require('laravel-mix')
 
 mix.webpackConfig({
   output: { chunkFilename: 'adminapp/js/chunks/[name].js?id=[chunkhash]' },
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
-      '@': __dirname + '/resources/adminapp/js',
-      '@pages': __dirname + '/resources/adminapp/js/pages',
-      '@components': __dirname + '/resources/adminapp/js/components',
-      '@cruds': __dirname + '/resources/adminapp/js/cruds'
-    }
-  }
+      resolve: {
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+          '@': __dirname + '/resources/adminapp/js',
+          '@pages': __dirname + '/resources/adminapp/js/pages',
+          '@components': __dirname + '/resources/adminapp/js/components',
+          '@cruds': __dirname + '/resources/adminapp/js/cruds',
+        }
+      },
 })
 
 // Admin App

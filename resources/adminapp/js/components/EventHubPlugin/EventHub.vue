@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import * as fb from '../../firebase'
+
 export default {
   data() {
     return {
@@ -52,10 +54,20 @@ export default {
   },
   watch: {
     $route: {
-      handler() {
-        axios.get('abilities').then(response => {
+      handler() { 
+        let permissionData = [];
+
+        fb.permissionsCollection.get().then(response => {
+          response.forEach((doc) => {
+            permissionData.push({
+                id: doc.id,
+                title: doc.data().title,
+                created_at: doc.data().created_at
+            });
+          });
+          const result = permissionData;
           this.$ability.update([
-            { subject: 'all', actions: response.data.data }
+            { subject: 'all', actions: result }
           ])
         })
       },

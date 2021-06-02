@@ -4,7 +4,6 @@
     <side-bar :sidebarLinks="sidebarLinks">
       <mobile-menu slot="content"></mobile-menu>
     </side-bar>
-
     <div class="main-panel">
       <top-navbar></top-navbar>
       <div class="content">
@@ -29,37 +28,69 @@ export default {
     return {
       sidebarLinks: [
         {
-          title: 'global.dashboard',
+          title: 'Dashboard',
           icon: 'dashboard',
           path: { name: 'dashboard' }
         },
         {
-          title: 'cruds.maps.title',
+          title: 'Trip Ticket',
+          icon: 'local_shipping',
+          path: { name: 'trip_ticket' },
+          children: [{
+              title: 'Ticket',
+              icon: 'map',
+              path: { name: 'tickets.index' },
+            }]
+        },
+        {
+          title: 'Maps',
           icon: 'map',
           path: { name: 'maps' },
-          gate: 'maps_access',
-          children: [
-              {
-              title: 'cruds.mapRoute.title',
+          children: [{
+              title: 'Maps',
               icon: 'map',
               path: { name: 'map_route.index' },
-              gate: 'map_route_access'
-            }
-          ]
+            }]
         },
         {
-          title: 'cruds.drivers.title',
-          icon: 'drive_eta',
+          title: 'Drivers',
+          icon: 'perm_contact_calendar',
           path: { name: 'driver' },
-          gate: 'driver_access',
-          children: []
+          children: [{
+              title: 'Drivers',
+              icon: 'map',
+              path: { name: 'driver_users.index' },
+            }]
         },
         {
-          title: 'cruds.passenger.title',
+          title: 'Passengers',
+          icon: 'people',
+          path: { name: 'passenger' },
+          children: [{
+              title: 'Passenger',
+              icon: 'perm_data_setting',
+              path: { name: 'passenger_list.index' },
+            }]
+        },
+        {
+          title: 'Vehicles',
+          icon: 'drive_eta',
+          path: { name: 'vehicle' },
+            children : [{
+                title: 'Vehicles',
+                icon: 'map',
+                path: { name: 'vehicle.index' },
+            }]
+        },
+        {
+          title: 'Location',
           icon: 'person_pin_circle',
-          path: { name: 'scan_passenger' },
-          gate: 'scan_passenger_access',
-          children: []
+          path: { name: 'location' },
+          children: [{
+              title: 'cruds.location.title',
+              icon: 'map',
+              path: { name: 'location.index' },
+            }]
         },
         {
           title: 'cruds.userManagement.title',
@@ -87,70 +118,6 @@ export default {
             }
           ]
         },
-        // {
-        //   title: 'cruds.expenseManagement.title',
-        //   icon: 'account_balance_wallet',
-        //   path: { name: 'expense_management' },
-        //   gate: 'expense_management_access',
-        //   children: [
-        //     {
-        //       title: 'cruds.expenseCategory.title',
-        //       icon: 'table_view',
-        //       path: { name: 'expense_categories.index' },
-        //       gate: 'expense_category_access'
-        //     },
-        //     {
-        //       title: 'cruds.incomeCategory.title',
-        //       icon: 'table_view',
-        //       path: { name: 'income_categories.index' },
-        //       gate: 'income_category_access'
-        //     },
-        //     {
-        //       title: 'cruds.expense.title',
-        //       icon: 'table_view',
-        //       path: { name: 'expenses.index' },
-        //       gate: 'expense_access'
-        //     },
-        //     {
-        //       title: 'cruds.income.title',
-        //       icon: 'table_view',
-        //       path: { name: 'incomes.index' },
-        //       gate: 'income_access'
-        //     },
-        //     {
-        //       title: 'cruds.expenseReport.title',
-        //       icon: 'table_view',
-        //       path: { name: 'expense_reports.index' },
-        //       gate: 'expense_report_access'
-        //     }
-        //   ]
-        // },
-        // {
-        //   title: 'cruds.productManagement.title',
-        //   icon: 'table_view',
-        //   path: { name: 'product_management' },
-        //   gate: 'product_management_access',
-        //   children: [
-        //     {
-        //       title: 'cruds.productCategory.title',
-        //       icon: 'table_view',
-        //       path: { name: 'product_categories.index' },
-        //       gate: 'product_category_access'
-        //     },
-        //     {
-        //       title: 'cruds.productTag.title',
-        //       icon: 'table_view',
-        //       path: { name: 'product_tags.index' },
-        //       gate: 'product_tag_access'
-        //     },
-        //     {
-        //       title: 'cruds.product.title',
-        //       icon: 'table_view',
-        //       path: { name: 'products.index' },
-        //       gate: 'product_access'
-        //     }
-        //   ]
-        // },
         {
           title: 'cruds.contactManagement.title',
           icon: 'import_contacts',
@@ -171,38 +138,6 @@ export default {
             }
           ]
         },
-        // {
-        //   title: 'cruds.basicCRM.title',
-        //   icon: 'table_view',
-        //   path: { name: 'basic_c_r_m' },
-        //   gate: 'basic_c_r_m_access',
-        //   children: [
-        //     {
-        //       title: 'cruds.crmStatus.title',
-        //       icon: 'table_view',
-        //       path: { name: 'crm_statuses.index' },
-        //       gate: 'crm_status_access'
-        //     },
-        //     {
-        //       title: 'cruds.crmCustomer.title',
-        //       icon: 'table_view',
-        //       path: { name: 'crm_customers.index' },
-        //       gate: 'crm_customer_access'
-        //     },
-        //     {
-        //       title: 'cruds.crmNote.title',
-        //       icon: 'table_view',
-        //       path: { name: 'crm_notes.index' },
-        //       gate: 'crm_note_access'
-        //     },
-        //     {
-        //       title: 'cruds.crmDocument.title',
-        //       icon: 'table_view',
-        //       path: { name: 'crm_documents.index' },
-        //       gate: 'crm_document_access'
-        //     }
-        //   ]
-        // },
         {
           title: 'cruds.settings.title',
           icon: 'settings',
@@ -212,6 +147,23 @@ export default {
         },
       ]
     }
+  },
+   watch:{
+    $route (to, from){
+      if(to.name){
+        this.$sidebar.showSidebar = false;        
+      }
+    }
+  }, 
+  mounted(){
+    if(this.$route.name == 'dashboard'){
+      this.$sidebar.showSidebar = true;
+    }else{
+      this.$sidebar.showSidebar = false;
+    }
   }
 }
+
+
+
 </script>

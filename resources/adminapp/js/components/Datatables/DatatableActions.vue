@@ -1,7 +1,6 @@
 <template>
   <div class="dt-action-container">
     <router-link
-      v-if="$can(xprops.permission_prefix + 'show')"
       :to="{ name: xprops.route + '.show', params: { id: row.id } }"
       class="btn btn-just-icon btn-round btn-link text-azure"
     >
@@ -10,7 +9,6 @@
 
     <router-link
       class="btn btn-just-icon btn-round btn-link text-success"
-      v-if="$can(xprops.permission_prefix + 'edit')"
       :to="{ name: xprops.route + '.edit', params: { id: row.id } }"
     >
       <i class="material-icons">edit</i>
@@ -19,7 +17,6 @@
     <a
       href="#"
       class="btn btn-just-icon btn-round btn-link text-rose"
-      v-if="$can(xprops.permission_prefix + 'delete')"
       @click.prevent="destroyData(row.id)"
       type="button"
     >

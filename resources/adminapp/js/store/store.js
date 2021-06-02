@@ -18,8 +18,6 @@ import ExpensesIndex from './cruds/Expenses'
 import ExpensesSingle from './cruds/Expenses/single'
 import IncomesIndex from './cruds/Incomes'
 import IncomesSingle from './cruds/Incomes/single'
-import PlansIndex from './cruds/Plans'
-import PlansSingle from './cruds/Plans/single'
 import ExpenseReports from './cruds/ExpenseReports'
 import ProductCategoriesIndex from './cruds/ProductCategories'
 import ProductCategoriesSingle from './cruds/ProductCategories/single'
@@ -41,6 +39,17 @@ import CrmDocumentsIndex from './cruds/CrmDocuments'
 import CrmDocumentsSingle from './cruds/CrmDocuments/single'
 import MapRouteIndex from './cruds/MapRoute'
 import MapRouteSingle from './cruds/MapRoute/single'
+import DriverUsersIndex from './cruds/DriverUsers'
+import DriverUsersSingle from './cruds/DriverUsers/single'
+import VehicleIndex from './cruds/Vehicle'
+import VehicleSingle from './cruds/Vehicle/single'
+import LocationIndex from './cruds/Location'
+import LocationSingle from './cruds/Location/single'
+import LoginSingle from './cruds/Login/single'
+import TicketsIndex from './cruds/Tickets'
+import TicketsSingle from './cruds/Tickets/single'
+import PassengerIndex from './cruds/Passenger'
+import PassengerSingle from './cruds/Passenger/single'
 
 Vue.use(Vuex)
 
@@ -84,7 +93,18 @@ export default new Vuex.Store({
     CrmDocumentsIndex,
     CrmDocumentsSingle,
     MapRouteIndex,
-    MapRouteSingle
+    MapRouteSingle,
+    DriverUsersIndex,
+    DriverUsersSingle,
+    VehicleIndex,
+    VehicleSingle,
+    LocationIndex,
+    LocationSingle,
+    LoginSingle,
+    TicketsSingle,
+    TicketsIndex,
+    PassengerIndex,
+    PassengerSingle
   },
   strict: debug
 })

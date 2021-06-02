@@ -15,10 +15,15 @@ const getters = {
 
 const actions = {
   fetchLanguages({ commit, dispatch }) {
-    axios.get('locales/languages').then(response => {
-      commit('setLanguages', response.data.languages)
-      dispatch('setLocale', localStorage.locale ?? response.data.locale)
-    })
+      const result = {
+        'languages':[{
+          'short_code': 'en',
+          'title': 'English'
+        }],
+        'locale':'en',
+      };
+      commit('setLanguages', result.languages)
+      dispatch('setLocale', result.locale) 
   },
   fetchLocaleMessages({ commit, getters }, locale) {
     if (getters.availableLocales.indexOf(locale) !== -1) {

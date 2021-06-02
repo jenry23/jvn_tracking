@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import GoogleMap from '@components/Maps/GoogleMap.vue'
+import GoogleMap from '@components/Maps/GoogleMap'
 import { mapGetters, mapActions } from 'vuex'
 import HeaderSettings from '@components/Datatables/HeaderSettings'
 import GlobalSearch from '@components/Datatables/GlobalSearch'
@@ -48,21 +48,18 @@ export default {
   computed: {
     ...mapGetters('MapRouteIndex', ['data', 'total', 'loading'])
   },
-  watch: {
-    query: {
-      handler(query) {
-        this.setQuery(query)
-        this.fetchIndexData()
-      },
-      deep: true
-    }
+  mounted(){
+    // this.fetchIndexData();
   },
   methods: {
     ...mapActions('MapRouteIndex', [
       'fetchIndexData',
       'setQuery',
       'resetState'
-    ])
+    ]),
+    getList: function(list) {
+    this.todoList = list;
+    }
   }
 }
 </script>

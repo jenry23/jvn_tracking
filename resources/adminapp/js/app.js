@@ -6,11 +6,16 @@
 
 require('./bootstrap')
 
-window.Vue = require('vue')
-window.moment.updateLocale('en', { week: { dow: 1 } })
+import Vue from 'vue';
+import moment from 'moment'
+import $ from 'jquery'
 
 Vue.config.productionTip = false
+window.Vue = Vue;
+
+Vue.prototype.moment = moment
 Vue.prototype.$jquery = $
+
 
 import App from './App.vue'
 
@@ -18,14 +23,15 @@ import App from './App.vue'
 import router from './routes/routes'
 import store from './store/store'
 import i18n from './i18n'
+import { auth } from './firebase'
+import '../sass/app.scss'
+import registerServiceWorker from './registerServiceWorker'
 
 // Plugins
 
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
 import GlobalMixins from './mixins/global'
-import { mapGetters, mapActions } from 'vuex'
-
 
 Vue.use(GlobalComponents)
 Vue.use(GlobalDirectives)
@@ -37,16 +43,28 @@ Vue.use(GlobalMixins)
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-  el: '#app',
-  render: h => h(App),
-  router,
-  store,
-  i18n,
-  created() {
-    this.fetchLanguages()
-  },
-  methods: {
-    ...mapActions('I18NStore', ['fetchLanguages'])
+ router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  if (requiresAuth && !auth.currentUser) {
+    next('/login')
+  }
+  else {
+    next()
+  }
+})
+
+
+
+let app
+ auth.onAuthStateChanged(() => {
+   if (!app) {
+    const app = new Vue({
+      el: '#app',
+      registerServiceWorker,
+      render: h => h(App),
+      router,
+      store,
+      i18n,
+    })
   }
 })

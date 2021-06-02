@@ -7,7 +7,7 @@
     }"
   >
     <label class="bmd-label-floating">
-      {{ $t('global.search') }}
+      Search
     </label>
     <div class="input-group">
       <input

@@ -12,7 +12,11 @@ $color-rose: #e91e63;
 @import "material-dashboard";
 @import "vue-select";
 @import "datetimepicker";
+@import "datepicker";
 @import "dropzone";
+@import "custom";
+@import "main";
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons');
 
 .has-items .bmd-label-floating {
     top: -1rem;

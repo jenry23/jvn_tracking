@@ -1,11 +1,13 @@
 <template>
   <input
     v-bind="$attrs"
+    id="datepicker"
     :ref="ref"
     @focus="$emit('focus')"
     @blur="$emit('blur')"
   />
 </template>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
 export default {
@@ -26,16 +28,17 @@ export default {
   },
   mounted() {
     let el = this.$refs[this.ref]
-    let format = this.$headMeta('moment_datetime_format')
-
+    let format = 'DD/MM/YYYY HH:mm:ss'
+    
     if (this.picker === 'date') {
-      format = this.$headMeta('moment_date_format')
+      format = 'DD/MM/YYYY'
     } else if (this.picker === 'time') {
-      format = this.$headMeta('moment_time_format')
+      format = 'HH:mm:ss'
     }
 
+
     this.$jquery(el).datetimepicker({
-      format,
+      format: 'DD MMMM YYYY',
       icons: {
         time: 'fa fa-clock-o',
         date: 'fa fa-calendar',
@@ -54,10 +57,13 @@ export default {
   beforeDestroy() {
     let el = this.$refs[this.ref]
     this.$jquery(el).off('dp.change', this.update)
+
   },
   methods: {
     update(event) {
+      console.log(event);
       this.$emit('input', event)
+
     }
   }
 }

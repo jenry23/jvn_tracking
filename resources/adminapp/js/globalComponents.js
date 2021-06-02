@@ -13,13 +13,17 @@ import DatetimePicker from '@components/DatetimePicker.vue'
 import VueRadio from '@components/VueRadio.vue'
 import vSelect from 'vue-select'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import { Datetime } from 'vue-datetime';
+import VueQriously from 'vue-qriously'
 
 const GlobalComponents = {
   install(Vue) {
     Vue.use(abilitiesPlugin, ability)
     Vue.use(SideBar)
+    Vue.use(VueQriously)
     Vue.use(LanguagesPlugin)
     Vue.use(EventHub)
+    Vue.component('datetime', Datetime);
     Vue.use(Datatable)
     Vue.use(VueGoogleMaps, {
       load: {
