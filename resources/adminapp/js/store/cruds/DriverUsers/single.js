@@ -7,36 +7,31 @@ function initialState() {
         name: '',
         birthday: '',
         address: '',
-        password: 'password123',
         gender: '',
         mobile_no: '',
-        civil_status: '',
-        user_account_id: '',
         created_at: '',
-        updated_at: '',
-        deleted_at: ''
       },
       lists: {
-        genders: []
+        gender: []
       },
       loading: false
- 
+
     }
   }
-  
+
   const route = 'driver-users'
-  
+
   const getters = {
     entry: state => state.entry,
     lists: state => state.lists,
     loading: state => state.loading
   }
-  
+
   const actions = {
     storeData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         let params = objectToFormData(state.entry, {
           indices: true,
@@ -49,13 +44,13 @@ function initialState() {
           .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -66,7 +61,7 @@ function initialState() {
     updateData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         let params = objectToFormData(state.entry, {
           indices: true,
@@ -81,13 +76,13 @@ function initialState() {
           .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -113,9 +108,6 @@ function initialState() {
     setMobileNo({ commit }, value) {
         commit('setMobileNo', value)
     },
-    setCivilStatus({ commit }, value) {
-        commit('setCivilStatus', value)
-    },
     setCreatedAt({ commit }, value) {
       commit('setCreatedAt', value)
     },
@@ -131,30 +123,27 @@ function initialState() {
       })
     },
     fetchShowData({ commit, dispatch }, id) {
-      axios.get(`${route}/${id}`).then(response => {
-        commit('setEntry', response.data.data)
-      })
+      fb.driversCollection.doc(id).get().then(response => {
+        commit('setEntry',response.data())
+     })
     },
     fetchCreateData({ commit }) {
       let genderData = [];
-
-      // fb.genderCollection.get().then(response => {
-      //   response.forEach((doc) => {
-      //     genderData.push({
-      //       id: doc.id,
-      //       name: doc.data().name,
-      //     });
-      //     const result = genderData
-      //     console.log(result);
-      //     commit('setLists', result)
-      //   })
-      // })
+      fb.genderCollection.get().then(response => {
+        response.forEach((doc) => {
+          genderData.push({name: doc.data().name});
+        })
+        const result = {
+          gender : genderData
+        }
+        commit('setList', result)
+      })
     },
     resetState({ commit }) {
       commit('resetState')
     }
   }
-  
+
   const mutations = {
     setEntry(state, entry) {
       state.entry = entry
@@ -177,9 +166,6 @@ function initialState() {
     setMobileNo(state, value) {
         state.entry.mobile_no = value
     },
-    setCivilStatus(state, value) {
-        state.entry.civil_status = value
-    },
     setCreatedAt(state, value) {
       state.entry.created_at = value
     },
@@ -192,14 +178,14 @@ function initialState() {
     setLoading(state, loading) {
       state.loading = loading
     },
-    setLists(state, lists) {
+    setList(state, lists) {
       state.lists = lists
     },
     resetState(state) {
       state = Object.assign(state, initialState())
     }
   }
-  
+
   export default {
     namespaced: true,
     state: initialState,
@@ -207,4 +193,3 @@ function initialState() {
     actions,
     mutations
   }
-  

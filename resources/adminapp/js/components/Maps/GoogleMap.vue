@@ -1,27 +1,106 @@
+<style>
+.modal {
+  min-width: 300px;
+}
+@media (min-width: 992px) {
+  .modal-xl {
+    max-width: 800px;
+  }
+}
+@media (min-width: 1200px) {
+  .modal-xl {
+    max-width: 1140px;
+  }
+}
+.modal-footer {
+  padding: 15px 0px 0px 0px;
+  border-top: 1px solid #e5e5e5;
+  margin-left: -14px;
+  margin-right: -14px;
+}
+.anyClass {
+  height:300px;
+  overflow-y: scroll;
+}
+</style>
 <template>
   <div>
-    <div>
-      <h2>Search and add a pin</h2>
-      <GmapAutocomplete
-        @place_changed='setPlace'
-      />
       <button
-        @click='addMarker'
-      >
-        Add
-      </button>
-    </div>
-    {{ center }}
-    <GmapMap
-      :center='center'
+          type="button"
+          class="btn btn-default"
+          @click="fetchMap"
+        >
+          <i class="material-icons" >
+            refresh
+          </i>
+          Refresh
+        </button> 
+      <Modal v-model="showModal" :title="title" modal-class="modal-xl">
+        <div class="row">
+          <div class="col-md-4">
+              <div class="card">
+                <div class="card-header" style="background-color: rgb(34, 139, 34);">
+                      <i class="fa fa-university"></i><strong style="color: white;"> Navigation Maps</strong>
+                </div>
+                <div class="card-body">
+                      <div id="panel" class="anyClass"></div>
+                  </div>
+                  </div>
+
+                <div class="card">
+                <div class="card-header" style="background-color: rgb(34, 139, 34);">
+                      <i class="fa fa-university"></i><strong style="color: white;"> Passenger List</strong>
+                </div>
+                  <div class="anyClass">
+                    <div class="card-body " v-for="datas in passenger" :key="datas.id">
+                    <div v-if="datas.pickup == true" >
+                        <b>{{datas.name}}</b> - <i class="material-icons" style="color:green;">check</i>
+                      </div>
+                      <div v-else>
+                        <b>{{datas.name}}</b> - <i class="material-icons" style="color:red;">block</i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          </div>
+
+        <div class="col-md-8">
+            <gmap-map
+              :center='one_center'
+              :zoom='18'
+              style='width:100%;  height: 800px;'
+            >
+          <DirectionsRenderer :origin="this.one_center" :destination="this.destination" :waypoints="this.waypts" travelMode="DRIVING"/>
+            </gmap-map>
+            </div>
+        </div>
+      </Modal>
+    <gmap-map
+      :center='this.center'
       :zoom='15'  
       ref="mapRef"
       style='width:100%;  height: 800px;'
     >
-    <GmapMarker ref="myMarker"
-     :position="google && new google.maps.LatLng(this.center)" />
-     />
-    </GmapMap>
+      <gmap-marker
+        :key="index"
+        v-for="(m, index) in markers"
+        :options="{
+          preserveViewport:true
+        }"
+        :position="m.position"
+        @click="toggleInfoWindow(m, index)"
+      />
+       
+       <div v-for="(m, index) in markers" :key="index">
+      <gmap-info-window
+        :options="infoOptions"
+        :position="m.position"
+      >
+      <div v-html="infoContent=m.name"></div>
+      </gmap-info-window>
+       </div>
+    </gmap-map>
+    
   </div>
 </template>
 
@@ -30,85 +109,160 @@
 import * as fb from '../../firebase'
 import DirectionsRenderer from "./DirectionsRenderer";
 import {gmapApi} from 'vue2-google-maps'
+import '@kouts/vue-modal/dist/vue-modal.css'
 
 export default {
   name: 'GoogleMap',
   components:{
-    DirectionsRenderer
+    DirectionsRenderer,
   },
   data() {
     return {
-      center: { lat: 0, lng: 0 },
-      marker: { lat: 14.1935599, lng: 121.2848253 },
+      center: { lat: 14.184794666666667, lng: 121.283092 },
+      one_center: { lat: 0, lng: 0 },
+      waypts : [], 
+      destination: { lat: 0, lng: 0},
+      passenger: [],
       currentPlace: null,
+      showModal: false,
       panel :'',
+      title: '',
       markers: [],
-      places: [],
-      bounds: {}
+      drivers: [],
+      infoContent: '',
+      infoWindowPos: {
+        lat: 0,
+        lng: 0
+      },
+      infoWinOpen: true,
+      currentMidx: null,
+      infoOptions: {
+        pixelOffset: {
+          width: 0,
+          height: -35
+        }
+      },
     }
   },
   computed: {
-    google: gmapApi,
-    origin() {
-      if (!this.start) return null;
-      return { query: this.start };
-    },
-    destionation() {
-      if (!this.end) return null;
-      return { query: this.end };
-    }
+    google: gmapApi
   },
   mounted() {
-    this.updateMarkers();
-    this.geolocate();
+    this.renderMap();
   },
   methods: {
-    setPlace(place) {
-      this.currentPlace = place;
+    fetchMap(){
+      this.renderMap();
     },
-    addMarker() {
-      if (this.currentPlace) {
-        const marker = {
-          lat: 14.254004666666667,
-          lng: 121.37980116666667,
-        };
-        this.markers.push({ position: marker });
-        this.places.push(this.currentPlace);
-        this.center = marker;
-        this.currentPlace = null;
+    renderMap(){
+     const markerData = [];
+      var self = this;
+      var query = fb.db_firebase.ref('driverTrips/');
+      query.on('value', function (snapshot) {
+      const marker = [];
+        snapshot.forEach(function (data) {
+              var key = data.key;
+              var obj = data.val();
+              if(obj.latitude != 0){
+              var position = {
+                  lat:obj.latitude,
+                  lng:obj.longitude
+              };
+              // self.infoWindowPos = position;
+              // console.log(key)
+              // self.infoContent = self.getInfoWindowContent(key);
+              marker.push({
+                name: key,
+                position:{
+                  lat:obj.latitude,
+                  lng:obj.longitude
+                }
+              })
+              }
+          })
+          self.markers = marker
+      })
+        // if(this.$refs.mapRef){
+        //     this.$refs.mapRef.$mapPromise.then((map) => {
+              
+        //     const trafficLayer = new google.maps.TrafficLayer();
+        //     trafficLayer.setMap(map)
+        //     const bounds = new google.maps.LatLngBounds()
+        //         for (let m of this.markers) {
+        //           bounds.extend(m.position)
+        //         }
+        //         map.fitBounds(bounds);
+        //     });
+        //   }
+    },
+    toggleInfoWindow: function (marker, idx) {
+      this.showModal = true;
+      if(this.showModal ==true){
+        this.getOneData(marker.name);
       }
     },
-    geolocate: function() {
-    const self = this;
-    var query = fb.db_firebase.ref('driverTrips/');
-    query.on('value', function (snapshot) {
-      var value = snapshot.val().E7Dz1of399gEDpvK7UOT;
-          var latitude = parseFloat(value.latitude);
-          var longitude = parseFloat(value.longitude);
-          self.center = {
-            lat: latitude,
-            lng: longitude,
-          };
-        });
-    self.start = { 
-      lat: 14.1819506,
-      lng: 121.1772846,
-    }
-    console.log(self.start);
+    getInfoWindowContent: function (marker) {
+        return (`
+            <p class="title is-4">${marker}</p>
+      `);
     },
-     updateMarkers: function() {
-      // Remove previous markers
-      
-         this.$refs.mapRef.$mapPromise.then((map) => {
-            const trafficLayer = new google.maps.TrafficLayer();
-            trafficLayer.setMap(map)
-
-            map.panTo(this.center);
-          })
-      },
-      addChangeBoundsListener() {
-      
-      },
+    getOneData(name){
+      fb.ticketsCollection.where('status','==','On Going').where('vehicleID','==',name)
+      .onSnapshot((response)=>{
+        response.forEach((doc) => {
+            var vehicle = doc.data().vehicleID;
+            var route = doc.data().routeID;
+            this.updateData(vehicle,route)
+        });
+      }, (error) => {
+        console.log(error);
+      })
+    },
+    updateData(vehicle,route)
+    {
+        this.title = vehicle+' - '+route;
+        const self = this;
+        var query = fb.db_firebase.ref('driverTrips/');
+        query.on('value', function (snapshot) {
+        var value = snapshot.val()[vehicle];
+              var latitude = parseFloat(value.latitude);
+              var longitude = parseFloat(value.longitude);
+              self.one_center = {
+                lat: latitude,
+                lng: longitude,
+              };
+        }); 
+        fb.ticketsCollection.doc(route).onSnapshot(response => {
+        var passengerList = response.data().passengerID; 
+        var routeID = response.data().routeID;
+        fb.routesCollection.doc(routeID).onSnapshot((response) => {
+          var routeList = response.data();
+          var destinationID = routeList['destination'];
+          var waypointsID = routeList['pitstops'];
+          var waypointsLocation = [];
+          fb.locationsCollection.doc(destinationID).onSnapshot(response => {
+            var destination = {
+              lat : response.data().latitude,
+              lng : response.data().longitude
+            }
+            this.destination = destination;
+          });
+          waypointsID.forEach((doc)=>{
+            fb.locationsCollection.doc(doc).onSnapshot(response => {
+              waypointsLocation.push({
+                location:{
+                    lat : response.data().latitude,
+                    lng : response.data().longitude
+                },
+                stopover: true,
+              });
+            });
+          });
+          this.waypts = waypointsLocation
+        });
+        this.passenger =   passengerList;
+      });
+    },
   },
 };
 </script>   

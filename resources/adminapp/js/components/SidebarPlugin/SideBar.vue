@@ -19,7 +19,7 @@
         <slot>
           <template v-for="(item, i) in sidebarLinks">
             <sidebar-item-group
-              v-if="item.children && $can(item.gate)"
+               v-if="item.children"
               :key="`group-${i}`"
               :item="item"
             >
@@ -89,7 +89,9 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      modules: []
+    }
   },
   computed: {
     sidebarStyle() {
@@ -101,7 +103,7 @@ export default {
   methods: {
     logout() {
       fb.auth.signOut().then(() => location.assign('/'))
-    }
+    },
   }
 }
 </script>

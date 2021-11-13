@@ -4,54 +4,68 @@ function initialState() {
     return {
       entry: {
         vehicleID: [],
-        start_time: '',
-        end_time: '',
+        startTime: '',
+        endTime: '',
         routeID: [],
+        typeID:[],
+        passengerID: [],
         driverID: [],
-        status: '',
+        status: 'Pending',
         created_at: new Date(),
       },
       lists :{
           vehicleID: [],
+          typeID:[],
           routeID: [],
+          passengerID: [],
           driverID: [],
       },
       loading: false
     }
   }
-  
+
   const route = 'tickets'
-  
+
   const getters = {
     entry: state => state.entry,
     loading: state => state.loading,
     lists: state => state.lists
   }
-  
+
   const actions = {
     storeData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         let params = objectToFormData(state.entry, {
           indices: true,
           booleansAsIntegers: true
         })
-
-        fb.vehiclesCollection.doc(state.entry.plate_no).set(state.entry).then(response => {
+        const dataList = {
+            date:state.entry.created_at,
+            driverID: state.entry.driverID.id,
+            routeID: state.entry.routeID.id,
+            vehicleID: state.entry.vehicleID.id,
+            passengerID: state.entry.vehicleID,
+            status:state.entry.status,
+            passengerID: state.entry.passengerID,
+            startTime: state.entry.startTime,
+            endTime:state.entry.endTime,
+          };
+        fb.ticketsCollection.doc(state.entry.routeID.id).set(dataList).then(response => {
             resolve(response)
           })
           .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -62,7 +76,7 @@ function initialState() {
     updateData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         fb.vehiclesCollection.doc(state.entry.plate_no).update(state.entry).then(response => {
             resolve(response)
@@ -70,13 +84,13 @@ function initialState() {
           .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -86,6 +100,12 @@ function initialState() {
     },
     setVehicleID({ commit }, value) {
       commit('setVehicleID', value)
+    },
+    setTypeID({ commit }, value) {
+      commit('setTypeID', value)
+    },
+    setPassenger({ commit }, value) {
+      commit('setPassenger', value)
     },
     setRouteID({ commit }, value){
       commit('setRouteID',value)
@@ -120,6 +140,9 @@ function initialState() {
         let vehicleList = []
         let routeList = []
         let driverList = []
+        let passengerList = []
+
+        let typeList = [{name:"Incoming"},{ name:"Outgoing"}]
         fb.vehiclesCollection.get().then(response => {
             response.forEach((doc) => {
                 vehicleList.push({
@@ -135,7 +158,7 @@ function initialState() {
                  origin: doc.data().origin,
             });
           });
-        
+
         fb.driversCollection.get().then(response => {
             response.forEach((doc) => {
               driverList.push({
@@ -144,15 +167,27 @@ function initialState() {
                    address: doc.data().address,
               });
          });
-          
+
+         fb.passengerCollection.get().then(response => {
+          response.forEach((doc) => {
+            passengerList.push({
+                 id: doc.id,
+                 name: doc.data().name,
+                 pickup: false
+            });
+         });
+
         const list = {
           vehicleID : vehicleList,
           routeID : routeList,
-          driverID : driverList
+          driverID : driverList,
+          passengerID : passengerList,
+          typeID: typeList
         }
-        console.log(list);
+        console.log(list)
           commit('setList',list)
           });
+        });
         });
       });
     },
@@ -165,7 +200,7 @@ function initialState() {
       commit('resetState')
     }
   }
-  
+
   const mutations = {
     setEntry(state, entry) {
       state.entry = entry
@@ -179,17 +214,23 @@ function initialState() {
     setRouteID(state,value){
       state.entry.routeID = value;
     },
+    setTypeID(state,value){
+      state.entry.typeID = value;
+    },
     setStartTime(state, value) {
-      state.entry.start_time = value
+      state.entry.startTime = value
     },
     setEndTime(state, value) {
-     state.entry.end_time = value
+     state.entry.endTime = value
     },
     setStatus(state, value) {
         state.entry.status = value
     },
     setDriverID(state, value) {
       state.entry.driverID = value
+    },
+    setPassenger(state, value) {
+      state.entry.passengerID = value
     },
     setCreatedAt(state, value) {
       state.entry.created_at = value
@@ -207,7 +248,7 @@ function initialState() {
       state = Object.assign(state, initialState())
     }
   }
-  
+
   export default {
     namespaced: true,
     state: initialState,
@@ -215,4 +256,3 @@ function initialState() {
     actions,
     mutations
   }
-  

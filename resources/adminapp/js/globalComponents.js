@@ -15,23 +15,43 @@ import vSelect from 'vue-select'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import { Datetime } from 'vue-datetime';
 import VueQriously from 'vue-qriously'
+import VueCookies from 'vue-cookies';
+import VueModal from '@kouts/vue-modal'
+import JsonExcel from "vue-json-excel";
+import VueTimepicker from 'vue2-timepicker'
 
 const GlobalComponents = {
   install(Vue) {
+    Vue.directive('uppercase', {
+      update (el) {
+        const sourceValue = el.value.replace(/\s+/g, '-');
+        const newValue = sourceValue.toUpperCase();
+    
+        if (sourceValue !== newValue) {
+          el.value = newValue;
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      },
+    })
     Vue.use(abilitiesPlugin, ability)
     Vue.use(SideBar)
     Vue.use(VueQriously)
+    Vue.use(VueCookies)
     Vue.use(LanguagesPlugin)
+    Vue.component('Modal', VueModal)
     Vue.use(EventHub)
     Vue.component('datetime', Datetime);
     Vue.use(Datatable)
     Vue.use(VueGoogleMaps, {
       load: {
-        key: 'AIzaSyCzKFAsu2L7zFdYGYgDSsyb_fDZqYa2mSU',
+        key: 'AIzaSyAAOK_-ogfS6sfQoQNmqVDzDcaGNe3S0GA',
         libraries: 'places',
+        v: 'beta'
       }
     });
     Vue.use(VueSweetalert2)
+    Vue.component('vue-timepicker',VueTimepicker);
+    Vue.component("downloadExcel", JsonExcel);
     Vue.component('datetime-picker', DatetimePicker)
     Vue.component('back-button', BackButton)
     Vue.component('material-spinner', MaterialSpinner)

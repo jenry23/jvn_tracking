@@ -9,8 +9,8 @@
                 <i class="material-icons">add</i>
               </div>
               <h4 class="card-title">
-                {{ $t('global.create') }}
-                <strong>{{ $t('cruds.contactCompany.title_singular') }}</strong>
+               Create
+                <strong>Company</strong>
               </h4>
             </div>
             <div class="card-body">
@@ -27,9 +27,7 @@
                       'is-focused': activeField == 'company_name'
                     }"
                   >
-                    <label class="bmd-label-floating">{{
-                      $t('cruds.contactCompany.fields.company_name')
-                    }}</label>
+                    <label class="bmd-label-floating">Company Name</label>
                     <input
                       class="form-control"
                       type="text"
@@ -39,6 +37,25 @@
                       @blur="clearFocus"
                     />
                   </div>
+
+                     <div
+                    class="form-group bmd-form-group"
+                    :class="{
+                      'has-items': entry.company_code,
+                      'is-focused': activeField == 'company_code'
+                    }"
+                  >
+                    <label class="bmd-label-floating">Company Code</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      :value="entry.company_code"
+                      @input="updateCompanyCode"
+                      @focus="focusField('company_code')"
+                      @blur="clearFocus"
+                    />
+                  </div>
+
                   <div
                     class="form-group bmd-form-group"
                     :class="{
@@ -46,9 +63,7 @@
                       'is-focused': activeField == 'company_address'
                     }"
                   >
-                    <label class="bmd-label-floating">{{
-                      $t('cruds.contactCompany.fields.company_address')
-                    }}</label>
+                    <label class="bmd-label-floating">Company Address</label>
                     <input
                       class="form-control"
                       type="text"
@@ -65,9 +80,7 @@
                       'is-focused': activeField == 'company_website'
                     }"
                   >
-                    <label class="bmd-label-floating">{{
-                      $t('cruds.contactCompany.fields.company_website')
-                    }}</label>
+                    <label class="bmd-label-floating">Company Website</label>
                     <input
                       class="form-control"
                       type="text"
@@ -84,9 +97,7 @@
                       'is-focused': activeField == 'company_email'
                     }"
                   >
-                    <label class="bmd-label-floating">{{
-                      $t('cruds.contactCompany.fields.company_email')
-                    }}</label>
+                    <label class="bmd-label-floating">Company Email</label>
                     <input
                       class="form-control"
                       type="text"
@@ -106,7 +117,7 @@
                 :isLoading="loading"
                 :disabled="loading"
               >
-                {{ $t('global.save') }}
+               Save
               </vue-button-spinner>
             </div>
           </div>
@@ -139,6 +150,7 @@ export default {
       'setCompanyName',
       'setCompanyAddress',
       'setCompanyWebsite',
+      'setCompanyCode',
       'setCompanyEmail'
     ]),
     updateCompanyName(e) {
@@ -152,6 +164,9 @@ export default {
     },
     updateCompanyEmail(e) {
       this.setCompanyEmail(e.target.value)
+    },
+    updateCompanyCode(e){
+      this.setCompanyCode(e.target.value)
     },
     submitForm() {
       this.storeData()

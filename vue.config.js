@@ -1,4 +1,4 @@
-const path = require("path");
+// const { InjectManifest } = require('workbox-webpack-plugin')
 
 module.exports = {
   runtimeCompiler: true,
@@ -8,17 +8,13 @@ module.exports = {
     msTileColor: '#000000',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
-
-    // configure the workbox plugin
     workboxPluginMode: 'InjectManifest',
-    workboxOptions: {
-      // swSrc is required in InjectManifest mode.
-      swSrc: 'public/service-worker.js',
-      // ...other Workbox options...
+    workboxOptions:{
+      swSrc: "public/sw.js"
     }
   },
   devServer: {
-    clientLogLevel: 'info'
+    clientLogLevel: 'info',
   },
   chainWebpack: config => {
     config
@@ -26,7 +22,9 @@ module.exports = {
       .clear()
       .add("/resources/adminapp/js/app.js")
       .end();
-    config.module.rules.delete('eslint');
+    config.module.rules.delete('eslint')
+    config.performance
+      .hints(false)
     config.resolve.alias
       .set("@", __dirname + '/resources/adminapp/js')
       .set("@pages", __dirname + '/resources/adminapp/js/pages')

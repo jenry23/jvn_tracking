@@ -63,10 +63,14 @@
                     Gender
                   </label>
                   <v-select
-                    :v-on="entry.gender"
-                    @input="updateGender"
-                    :options="lists.genders"
-                    :clearable="false"
+                      name="gender"
+                      label="name"
+                      :value="entry.gender"
+                      :options="lists.gender"
+                      @input="updateGender"
+                      @focus="focusField('gender')"
+                      @blur="clearFocus"
+                      required
                   />
                   </div>
                    <div
@@ -93,23 +97,6 @@
                     <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.civil_status,
-                      'is-focused': activeField == 'civil_status'
-                    }"
-                  >
-                    <label class="bmd-label-floating required">Civil Status</label>
-                    <input
-                       class="form-control"
-                      type="text"
-                      :value="entry.civil_status"
-                      @input="updateCivilStatus"
-                      @focus="focusField('civil_status')"
-                      @blur="clearFocus"
-                    />
-                  </div>
-                    <div
-                    class="form-group bmd-form-group"
-                    :class="{
                       'has-items': true,
                       'is-focused': activeField == 'birthday'
                     }"
@@ -118,6 +105,7 @@
                     <date-picker
                       class="form-control"
                       :value="entry.birthday"
+                      valueType="format"
                       @input="updateBirthday"
                       placeholder="Birthday"
                       @focus="focusField('birthday')"
@@ -178,7 +166,6 @@ export default {
       'setAddress',
       'setGender',
       'setMobileNo',
-      'setCivilStatus',
       'setUserAccountID',
       'fetchCreateData'
       ]),
@@ -198,14 +185,10 @@ export default {
     updateMobileNo(e) {
       this.setMobileNo(e.target.value)
     },
-    updateCivilStatus(e) {
-      this.setCivilStatus(e.target.value)
-    },
     submitForm() {
       this.storeData()
         .then(() => {
           this.$router.push({ name: 'driver_users.index' })
-          this.$eventHub.$emit('create-success')
         })
         .catch(error => {
           this.status = 'failed'

@@ -13,6 +13,8 @@
                             <center>
                                 <h3>JVN Consultancy And Genereal Services</h3>
                                 </center>
+                               
+
                                 <div class="bmd-form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -20,9 +22,11 @@
                                                 <i class="material-icons">email</i>
                                             </span>
                                         </div>
-                                        <input  class="form-control pl-2"  :value="entry.email" type="text" placeholder="Email" @input="updateEmail" id="email" required autocomplete="email"/>
+                                        <input  class="form-control pl-2" v-model="email" type="text" placeholder="Email" @input="updateEmail" id="email" required autocomplete="email"/>
                                     </div>
-
+                                    <div v-if="status1" class="error">
+                                          {{status_name}}
+                                    </div>
                                 </div>
                                 <div class="bmd-form-group">
                                     <div class="input-group">
@@ -31,12 +35,12 @@
                                                 <i class="material-icons">lock_outline</i>
                                             </span>
                                         </div>
-                                        <input class="form-control pl-2" :value="entry.password" type="password" @input="updatePassword" placeholder="Password" id="password1" />
+                                        <input class="form-control pl-2" v-model="password" type="password" @input="updatePassword" placeholder="Password" id="password1" />
                                     </div>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" name="remember" class="form-check-input">
+                                        <input type="checkbox" name="remember" class="form-check-input" @click="rememberMe()" :checked="this.status_me">
                                         <span class="form-check-sign"><span class="check"></span></span>
                                         Remember me
                                     </label>
@@ -68,6 +72,11 @@ export default {
   data() {
     return {
       status: '',
+      email:'',
+      password:'',
+      status_me: false,
+      status1: false,
+      status_name: '',
       activeField: ''
     }
   },
@@ -77,10 +86,21 @@ export default {
   beforeDestroy() {
     this.resetState()
   },
+  mounted(){
+    if(this.$cookies.get('email')){
+      var email = this.$cookies.get('email');
+      var password = this.$cookies.get('password');
+
+      this.email = email;
+      this.password = password;
+      this.status_me = true;
+    }
+  },
   methods: {
     ...mapActions('LoginSingle', [
       'LoginData',
       'resetState',
+      'remember',
       'setEmail',
       'setPassword'
     ]),
@@ -90,16 +110,32 @@ export default {
     updatePassword(e) {
       this.setPassword(e.target.value)
     },
+    rememberMe(){
+      this.status_me = true;
+    },
      submitForm() {
+      this.setEmail(this.email);
+      this.setPassword(this.password)
       this.LoginData()
         .then(() => {
-        console.log('success');
+        if(this.status_me == true){
+          console.log(this.status_me)
+            this.$cookies.set('email', this.email, { expires: 14 })
+            this.$cookies.set('password', this.password, { expires: 14 })
+        }
+          console.log('test');
           this.$router.push({ name: 'dashboard' })
           this.$eventHub.$emit('login-success')
         })
+        
         .catch(error => {
-        console.log('failed');
-          this.status = 'failed'
+          console.log(error)
+          this.status1 = true;
+          if(error.code == 'auth/user-not-found'){
+            this.status_name = 'Email does not exist';
+          }else{
+             this.status_name = 'Invalid Password';
+          }
           _.delay(() => {
             this.status = ''
           }, 3000)

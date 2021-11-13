@@ -2,9 +2,10 @@
   <router-link :to="item.path" v-slot>
     <li class="nav-item" :class="{ active: isActive }">
       <a
-        :href="'#' + getAttributeTitle"
+        :href="'#/admin/' + getAttributeTitle"
         class="nav-link collapsed"
         data-toggle="collapse"
+        @click="showTable"
       >
         <template v-if="text">
           <span class="sidebar-mini">{{ textIcon }}</span>
@@ -15,13 +16,13 @@
         </template>
         <template v-else>
           <i class="material-icons">{{ item.icon }}</i>
-          <p>
+            <div>
             {{ $t(item.title) }}
             <b class="caret"></b>
-          </p>
+            </div>
         </template>
       </a>
-      <div :id="getAttributeTitle" class="collapse" ref="tab">
+      <div :id="getAttributeTitle" class="collapse" ref="tab" >
         <ul class="nav">
           <template v-for="(child, i) in item.children">
             <sidebar-item-sub-group
@@ -43,6 +44,11 @@
 <script>
 export default {
   name: 'SidebarItemGroup',
+  data() {
+    return {
+      counter:1
+    }
+  },
   props: {
     item: {
       type: Object,
@@ -50,7 +56,6 @@ export default {
         title: undefined,
         icon: undefined,
         path: {},
-        gate: undefined,
         children: []
       })
     },
@@ -88,6 +93,24 @@ export default {
       }
 
       return false
+    }
+  },
+  methods:{
+    showTable(){
+      console.log(this.counter);
+      if(this.counter % 2 == 0)
+      {
+        this.$refs.tab.classList.add('show')
+      }
+      else
+      {
+        this.$refs.tab.classList.remove('show')
+      }
+      if(this.isActive == false){
+        this.$refs.tab.classList.add('show')
+      }else{
+        this.counter += 1;
+      }
     }
   }
 }

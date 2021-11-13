@@ -8,8 +8,8 @@
               <i class="material-icons">remove_red_eye</i>
             </div>
             <h4 class="card-title">
-              {{ $t('global.view') }}
-              <strong>{{ $t('cruds.contactCompany.title_singular') }}</strong>
+              View
+              <strong>Company</strong>
             </h4>
           </div>
           <div class="card-body">
@@ -23,15 +23,15 @@
                     <tbody>
                       <tr>
                         <td class="text-primary">
-                          {{ $t('cruds.contactCompany.fields.id') }}
+                          Company Code
                         </td>
                         <td>
-                          {{ entry.id }}
+                          {{ entry.company_code }}
                         </td>
                       </tr>
                       <tr>
                         <td class="text-primary">
-                          {{ $t('cruds.contactCompany.fields.company_name') }}
+                          Company Name
                         </td>
                         <td>
                           {{ entry.company_name }}
@@ -39,9 +39,7 @@
                       </tr>
                       <tr>
                         <td class="text-primary">
-                          {{
-                            $t('cruds.contactCompany.fields.company_address')
-                          }}
+                         Company Address
                         </td>
                         <td>
                           {{ entry.company_address }}
@@ -49,9 +47,7 @@
                       </tr>
                       <tr>
                         <td class="text-primary">
-                          {{
-                            $t('cruds.contactCompany.fields.company_website')
-                          }}
+                         Company Website
                         </td>
                         <td>
                           {{ entry.company_website }}
@@ -59,7 +55,7 @@
                       </tr>
                       <tr>
                         <td class="text-primary">
-                          {{ $t('cruds.contactCompany.fields.company_email') }}
+                          Company Email
                         </td>
                         <td>
                           {{ entry.company_email }}

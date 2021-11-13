@@ -19,20 +19,20 @@ function initialState() {
       loading: false
     }
   }
-  
+
   const route = 'vehicle'
-  
+
   const getters = {
     entry: state => state.entry,
     loading: state => state.loading,
     lists: state => state.lists
   }
-  
+
   const actions = {
     storeData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         let params = objectToFormData(state.entry, {
           indices: true,
@@ -45,13 +45,13 @@ function initialState() {
           .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -62,7 +62,7 @@ function initialState() {
     updateData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         fb.vehiclesCollection.doc(state.entry.plate_no).update(state.entry).then(response => {
             resolve(response)
@@ -70,13 +70,13 @@ function initialState() {
           .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -118,15 +118,15 @@ function initialState() {
     },
 
     fetchShowData({ commit, dispatch }, id) {
-      axios.get(`${route}/${id}`).then(response => {
-        commit('setEntry', response.data.data)
-      })
+      fb.vehiclesCollection.doc(id).get().then(response => {
+        commit('setEntry',response.data())
+     })
     },
     resetState({ commit }) {
       commit('resetState')
     }
   }
-  
+
   const mutations = {
     setEntry(state, entry) {
       state.entry = entry
@@ -165,7 +165,7 @@ function initialState() {
       state = Object.assign(state, initialState())
     }
   }
-  
+
   export default {
     namespaced: true,
     state: initialState,
@@ -173,4 +173,3 @@ function initialState() {
     actions,
     mutations
   }
-  

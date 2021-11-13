@@ -103,11 +103,6 @@ export default {
           thComp: TranslatedHeader,
         },
         {
-          title: 'Civil Status',
-          field: 'civil_status',
-          thComp: TranslatedHeader,
-        },
-        {
           title: 'Actions',
           thComp: TranslatedHeader,
           tdComp: DatatableActions,

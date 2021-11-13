@@ -8,20 +8,19 @@
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title">
-              {{ $t('global.table') }}
-              <strong>{{ $t('cruds.location.title') }}</strong>
+              Table
+              <strong>Location</strong>
             </h4>
           </div>
           <div class="card-body">
             <router-link
               class="btn btn-primary"
-              v-if="$can(xprops.permission_prefix + 'create')"
               :to="{ name: xprops.route + '.create' }"
             >
               <i class="material-icons">
                 add
               </i>
-              {{ $t('global.add') }}
+              Create Location
             </router-link>
             <button
               type="button"
@@ -33,7 +32,7 @@
               <i class="material-icons" :class="{ 'fa-spin': loading }">
                 refresh
               </i>
-              {{ $t('global.refresh') }}
+              Refresh
             </button>
           </div>
           <div class="card-body">
@@ -55,7 +54,6 @@
                   :pageSizeOptions="[10, 25, 50, 100]"
                 >
                   <global-search :query="query" class="pull-left" />
-                  <header-settings :columns="columns" class="pull-right" />
                 </datatable>
               </div>
             </div>
@@ -82,39 +80,39 @@ export default {
     return {
       columns: [
         {
-          title: 'cruds.location.fields.id',
+          title: 'ID',
           field: 'id',
           thComp: TranslatedHeader,
           sortable: true,
           colStyle: 'width: 100px;'
         },
         {
-          title: 'cruds.location.fields.name',
+          title: 'Name',
           field: 'name',
           thComp: TranslatedHeader,
         },
         {
-          title: 'cruds.location.fields.address',
+          title: 'Address',
           field: 'address',
           thComp: TranslatedHeader,
         },
         {
-          title: 'cruds.location.fields.latitude',
+          title: 'Latitude',
           field: 'latitude',
           thComp: TranslatedHeader,
         },
         {
-          title: 'cruds.location.fields.longtitude',
-          field: 'longtitude',
+          title: 'Longitude',
+          field: 'longitude',
           thComp: TranslatedHeader,
         },
         {
-          title: 'cruds.location.fields.status',
-          field: 'status',
+          title: 'Tag',
+          field: 'tag',
           thComp: TranslatedHeader,
         },
         {
-          title: 'global.actions',
+          title: 'Actions',
           thComp: TranslatedHeader,
           tdComp: DatatableActions,
           visible: true,
@@ -123,7 +121,7 @@ export default {
           colStyle: 'width: 150px;'
         }
       ],
-      query: { sort: 'id', order: 'desc', limit: 100, s: '' },
+      query: { sort: 'id', order: 'desc', limit: 10, s: '' },
       xprops: {
         module: 'LocationIndex',
         route: 'location',

@@ -1,14 +1,14 @@
+import * as fb from '../../../firebase'
+
 function initialState() {
   return {
     entry: {
-      id: null,
       company_name: '',
+      company_code: '',
       company_address: '',
       company_website: '',
       company_email: '',
-      created_at: '',
-      updated_at: '',
-      deleted_at: ''
+      created_at: ''
     },
     loading: false
   }
@@ -31,11 +31,10 @@ const actions = {
         indices: true,
         booleansAsIntegers: true
       })
-      axios
-        .post(route, params)
-        .then(response => {
-          resolve(response)
-        })
+
+      fb.companyCollection.doc(state.entry.company_code).set(state.entry).then(response => {
+        resolve(response)
+      })
         .catch(error => {
           let message = error.response.data.message || error.message
           let errors = error.response.data.errors
@@ -88,6 +87,9 @@ const actions = {
   setCompanyName({ commit }, value) {
     commit('setCompanyName', value)
   },
+  setCompanyCode({ commit }, value) {
+    commit('setCompanyCode', value)
+  },
   setCompanyAddress({ commit }, value) {
     commit('setCompanyAddress', value)
   },
@@ -112,9 +114,9 @@ const actions = {
     })
   },
   fetchShowData({ commit, dispatch }, id) {
-    axios.get(`${route}/${id}`).then(response => {
-      commit('setEntry', response.data.data)
-    })
+    fb.companyCollection.doc(id).get().then(response => {
+      commit('setEntry',response.data())
+   })
   },
   resetState({ commit }) {
     commit('resetState')
@@ -127,6 +129,9 @@ const mutations = {
   },
   setCompanyName(state, value) {
     state.entry.company_name = value
+  },
+  setCompanyCode(state, value) {
+    state.entry.company_code = value
   },
   setCompanyAddress(state, value) {
     state.entry.company_address = value

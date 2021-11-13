@@ -9,8 +9,8 @@
                 <i class="material-icons">add</i>
               </div>
               <h4 class="card-title">
-                {{ $t('global.create') }}
-                <strong>{{ $t('cruds.role.title_singular') }}</strong>
+                Create
+                <strong>Roles</strong>
               </h4>
             </div>
             <div class="card-body">
@@ -27,9 +27,7 @@
                       'is-focused': activeField == 'title'
                     }"
                   >
-                    <label class="bmd-label-floating required">{{
-                      $t('cruds.role.fields.title')
-                    }}</label>
+                    <label class="bmd-label-floating required">Title</label>
                     <input
                       class="form-control"
                       type="text"
@@ -43,13 +41,30 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
+                      'has-items': entry.companyID,
+                      'is-focused': activeField == 'companyID'
+                    }"
+                  >
+                    <label class="bmd-label-floating required">Company</label>
+                    <v-select 
+                      name="companyID"
+                      label="company_name"
+                      :value="entry.companyID"
+                      :options="lists.companyID"
+                      @input="updateCompanyID"
+                      @focus="focusField('companyID')"
+                      @blur="clearFocus"
+                      required
+                      />
+                  </div>
+                  <div
+                    class="form-group bmd-form-group"
+                    :class="{
                       'has-items': entry.permissions.length !== 0,
                       'is-focused': activeField == 'permissions'
                     }"
                   >
-                    <label class="bmd-label-floating required">{{
-                      $t('cruds.role.fields.permissions')
-                    }}</label>
+                    <label class="bmd-label-floating required">Permissions</label>
                     <v-select
                       name="permissions"
                       label="title"
@@ -59,8 +74,8 @@
                       :closeOnSelect="false"
                       multiple
                       @input="updatePermissions"
-                      @search.focus="focusField('permissions')"
-                      @search.blur="clearFocus"
+                      @focus="focusField('permissions')"
+                      @blur="clearFocus"
                     />
                   </div>
                 </div>
@@ -73,7 +88,7 @@
                 :isLoading="loading"
                 :disabled="loading"
               >
-                {{ $t('global.save') }}
+              Save
               </vue-button-spinner>
             </div>
           </div>
@@ -107,9 +122,13 @@ export default {
       'storeData',
       'resetState',
       'setTitle',
+      'setCompanyID',
       'setPermissions',
       'fetchCreateData'
     ]),
+    updateCompanyID(value){
+      this.setCompanyID(value)
+    },
     updateTitle(e) {
       this.setTitle(e.target.value)
     },

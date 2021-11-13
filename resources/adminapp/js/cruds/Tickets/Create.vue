@@ -28,7 +28,7 @@
                     }"
                   >
                     <label class="bmd-label-floating required">Vehicle ID</label>
-                    <v-select 
+                    <v-select
                       name="vehicleID"
                       label="id"
                       :value="entry.vehicleID"
@@ -47,7 +47,7 @@
                     }"
                   >
                     <label class="bmd-label-floating required">Route ID</label>
-                    <v-select 
+                    <v-select
                       name="routeID"
                       label="id"
                       :value="entry.routeID"
@@ -60,33 +60,33 @@
                     </div>
                   <div class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.start_time,
-                      'is-focused': activeField == 'start_time'
+                      'has-items': entry.startTime,
+                      'is-focused': activeField == 'startTime'
                     }">
                     <label class="bmd-label-floating" required>Start Time</label>
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.start_time"
+                      :value="entry.startTime"
                       @input="updateStartTime"
-                      @focus="focusField('start_time')"
+                      @focus="focusField('startTime')"
                       @blur="clearFocus"
                     />
                   </div>
                    <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.end_time,
-                      'is-focused': activeField == 'end_time'
+                      'has-items': entry.endTime,
+                      'is-focused': activeField == 'endTime'
                     }"
                   >
                     <label class="bmd-label-floating required">End Time</label>
                         <input
                       class="form-control"
                       type="text"
-                      :value="entry.end_time"
+                      :value="entry.endTime"
                       @input="updateEndTime"
-                      @focus="focusField('end_time')"
+                      @focus="focusField('endTime')"
                       @blur="clearFocus"
                     />
                   </div>
@@ -98,7 +98,7 @@
                     }"
                   >
                     <label class="bmd-label-floating required">Driver ID</label>
-                    <v-select 
+                    <v-select
                       name="driverID"
                       label="name"
                       :value="entry.driverID"
@@ -112,17 +112,40 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.status,
-                      'is-focused': activeField == 'status'
+                      'has-items': entry.typeID,
+                      'is-focused': activeField == 'typeID'
                     }"
                   >
-                    <label class="bmd-label-floating required">Status</label>
-                    <input
-                      class="form-control"
-                      type="number"
-                      :value="entry.status"
-                      @input="updateStatus"
-                      @focus="focusField('status')"
+                    <label class="bmd-label-floating required">Type ID</label>
+                    <v-select
+                      name="typeID"
+                      label="name"
+                      :value="entry.typeID"
+                      :options="lists.typeID"
+                      @input="updateTypeID"
+                      @focus="focusField('typeID')"
+                      @blur="clearFocus"
+                      required
+                      />
+                  </div>
+                    <div
+                    class="form-group bmd-form-group"
+                    :class="{
+                      'has-items': entry.passengerID,
+                      'is-focused': activeField == 'passengerID'
+                    }"
+                  >
+                    <label class="bmd-label-floating required">Passenger</label>
+                    <v-select
+                      name="passengerID"
+                      label="name"
+                      :key="'passengerID-field'"
+                      :v-model="entry.passengerID"
+                      :options="lists.passengerID"
+                      :closeOnSelect="false"
+                      multiple
+                      @input="updatePassengerID"
+                      @focus="focusField('passengerID')"
                       @blur="clearFocus"
                     />
                   </div>
@@ -164,15 +187,17 @@ export default {
   },
   mounted(){
       this.fetchCreatedData();
-  },    
+  },
   methods: {
     ...mapActions('TicketsSingle', [
       'fetchCreatedData',
-      'storeData', 
+      'storeData',
       'resetState',
       'setVehicleID',
       'setRouteID',
       'setStatus',
+      'setPassenger',
+      'setTypeID',
       'setStartTime',
       'setEndTime',
       'setDriverID'
@@ -195,11 +220,16 @@ export default {
     updateDriverID(e){
       this.setDriverID(e)
     },
+    updateTypeID(e){
+      this.setTypeID(e)
+    },
+    updatePassengerID(e){
+      this.setPassenger(e)
+    },
     submitForm() {
       this.storeData()
         .then(() => {
           this.$router.push({ name: 'tickets.index' })
-          this.$eventHub.$emit('create-success')
         })
         .catch(error => {
           this.status = 'failed'

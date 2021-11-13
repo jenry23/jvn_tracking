@@ -1,10 +1,9 @@
-import { result } from 'lodash'
 import * as fb from '../../../firebase'
 
 const set = key => (state, val) => {
     state[key] = val
   }
-  
+
   function initialState() {
     return {
       data: [],
@@ -13,21 +12,37 @@ const set = key => (state, val) => {
       loading: false
     }
   }
-  
+
   const route = 'passenger'
-  
-  
+
+
   const getters = {
     data: state => state.data,
     total: state => state.total,
     loading: state => state.loading
   }
-  
+
   const actions = {
     fetchIndexData({ commit, state }) {
       commit('setLoading', true)
       let passengerData = [];
 
+      // var first = fb.passengerCollection
+      //   .orderBy("name")
+      //   .limit(25).then(response =>{
+      //     console.log(response)
+      //     response.forEach((doc) => {
+      //       passengerData.push({
+      //           id: doc.id,
+      //           address: doc.data().address,
+      //           name: doc.data().name,
+      //         });
+      //     });
+      //     const results = passengerData;
+      //     const total = passengerData.length;
+      //     commit('setData', results)
+      //     commit('setTotal', total )
+      //   });
       fb.passengerCollection.get().then(response => {
         response.forEach((doc) => {
           passengerData.push({
@@ -63,7 +78,7 @@ const set = key => (state, val) => {
       commit('resetState')
     }
   }
-  
+
   const mutations = {
     setData: set('data'),
     setTotal: set('total'),
@@ -76,7 +91,7 @@ const set = key => (state, val) => {
       Object.assign(state, initialState())
     }
   }
-  
+
   export default {
     namespaced: true,
     state: initialState,
@@ -84,4 +99,3 @@ const set = key => (state, val) => {
     actions,
     mutations
   }
-  

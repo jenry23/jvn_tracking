@@ -9,40 +9,39 @@ function initialState() {
       loading: false
     }
   }
-  
+
   const route = 'login'
-  
+
   const getters = {
     entry: state => state.entry,
     loading: state => state.loading
   }
-  
+
   const actions = {
     LoginData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         let params = objectToFormData(state.entry, {
           indices: true,
           booleansAsIntegers: true
         })
 
-        console.log(state.entry.email);
         fb.auth.signInWithEmailAndPassword(state.entry.email,state.entry.password)
           .then(response => {
             resolve(response)
           })
-          .catch(error => {
-            let message = error.response.data.message || error.message
-            let errors = error.response.data.errors
-  
+          .catch(function(error) {
+            let message = error.message || error.message
+            let errors = error.code
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -50,7 +49,6 @@ function initialState() {
           })
       })
     },
-   
     setEmail({ commit }, value) {
       commit('setEmail', value)
     },
@@ -61,7 +59,7 @@ function initialState() {
       commit('resetState')
     }
   }
-  
+
   const mutations = {
     setEntry(state, entry) {
       state.entry = entry
@@ -79,7 +77,7 @@ function initialState() {
       state = Object.assign(state, initialState())
     }
   }
-  
+
   export default {
     namespaced: true,
     state: initialState,
@@ -87,4 +85,3 @@ function initialState() {
     actions,
     mutations
   }
-  

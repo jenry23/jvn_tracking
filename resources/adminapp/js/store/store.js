@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import Alert from './modules/alert'
 import I18NStore from './modules/i18n'
 
+
 import PermissionsIndex from './cruds/Permissions'
 import PermissionsSingle from './cruds/Permissions/single'
 import RolesIndex from './cruds/Roles'
@@ -50,6 +51,9 @@ import TicketsIndex from './cruds/Tickets'
 import TicketsSingle from './cruds/Tickets/single'
 import PassengerIndex from './cruds/Passenger'
 import PassengerSingle from './cruds/Passenger/single'
+import RoutesIndex from './cruds/Routes'
+import RoutesSingle from './cruds/Routes/single'
+
 
 Vue.use(Vuex)
 
@@ -104,7 +108,9 @@ export default new Vuex.Store({
     TicketsSingle,
     TicketsIndex,
     PassengerIndex,
-    PassengerSingle
+    PassengerSingle,
+    RoutesIndex,
+    RoutesSingle
   },
   strict: debug
 })

@@ -1,6 +1,5 @@
 <template>
   <router-link
-    v-if="item.gate === undefined || $can(item.gate)"
     :to="item.path"
     v-slot="{ href, route, navigate, isActive, isExactActive }"
   >

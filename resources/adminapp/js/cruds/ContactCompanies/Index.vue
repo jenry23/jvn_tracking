@@ -8,20 +8,19 @@
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title">
-              {{ $t('global.table') }}
-              <strong>{{ $t('cruds.contactCompany.title') }}</strong>
+              Table
+              <strong>Company</strong>
             </h4>
           </div>
           <div class="card-body">
             <router-link
               class="btn btn-primary"
-              v-if="$can(xprops.permission_prefix + 'create')"
               :to="{ name: xprops.route + '.create' }"
             >
               <i class="material-icons">
                 add
               </i>
-              {{ $t('global.add') }}
+              Add
             </router-link>
             <button
               type="button"
@@ -33,7 +32,7 @@
               <i class="material-icons" :class="{ 'fa-spin': loading }">
                 refresh
               </i>
-              {{ $t('global.refresh') }}
+              Refresh
             </button>
           </div>
           <div class="card-body">
@@ -55,7 +54,6 @@
                   :pageSizeOptions="[10, 25, 50, 100]"
                 >
                   <global-search :query="query" class="pull-left" />
-                  <header-settings :columns="columns" class="pull-right" />
                 </datatable>
               </div>
             </div>
@@ -82,38 +80,38 @@ export default {
     return {
       columns: [
         {
-          title: 'cruds.contactCompany.fields.id',
+          title: 'ID',
           field: 'id',
           thComp: TranslatedHeader,
           sortable: true,
           colStyle: 'width: 100px;'
         },
         {
-          title: 'cruds.contactCompany.fields.company_name',
+          title: 'Company Name',
           field: 'company_name',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'cruds.contactCompany.fields.company_address',
+          title: 'Company Address',
           field: 'company_address',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'cruds.contactCompany.fields.company_website',
+          title: 'Company Website',
           field: 'company_website',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'cruds.contactCompany.fields.company_email',
+          title: 'Company Email',
           field: 'company_email',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'global.actions',
+          title: 'Actions',
           thComp: TranslatedHeader,
           tdComp: DatatableActions,
           visible: true,

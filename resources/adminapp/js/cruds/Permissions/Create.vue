@@ -9,8 +9,8 @@
                 <i class="material-icons">add</i>
               </div>
               <h4 class="card-title">
-                {{ $t('global.create') }}
-                <strong>{{ $t('cruds.permission.title_singular') }}</strong>
+                Create
+                <strong>Permission</strong>
               </h4>
             </div>
             <div class="card-body">
@@ -27,9 +27,7 @@
                       'is-focused': activeField == 'title'
                     }"
                   >
-                    <label class="bmd-label-floating required">{{
-                      $t('cruds.permission.fields.title')
-                    }}</label>
+                    <label class="bmd-label-floating required">Title</label>
                     <input
                       class="form-control"
                       type="text"
@@ -50,7 +48,7 @@
                 :isLoading="loading"
                 :disabled="loading"
               >
-                {{ $t('global.save') }}
+              Save
               </vue-button-spinner>
             </div>
           </div>

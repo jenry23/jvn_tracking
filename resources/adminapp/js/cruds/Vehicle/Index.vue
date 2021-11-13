@@ -21,18 +21,6 @@
               </i>
               Add Vehicle
             </router-link>
-            <button
-              type="button"
-              class="btn btn-default"
-              @click="fetchIndexData"
-              :disabled="loading"
-              :class="{ disabled: loading }"
-            >
-              <i class="material-icons" :class="{ 'fa-spin': loading }">
-                refresh
-              </i>
-              Refresh
-            </button>
           </div>
           <div class="card-body">
             <div class="row">

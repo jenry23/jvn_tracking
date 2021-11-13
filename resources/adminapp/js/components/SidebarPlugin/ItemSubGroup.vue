@@ -12,7 +12,6 @@ export default {
         title: undefined,
         icon: undefined,
         path: {},
-        gate: undefined,
         children: []
       })
     }

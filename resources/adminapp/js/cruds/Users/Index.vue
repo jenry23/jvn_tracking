@@ -8,8 +8,8 @@
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title">
-              {{ $t('global.table') }}
-              <strong>{{ $t('cruds.user.title') }}</strong>
+              Table
+              <strong>Users</strong>
             </h4>
           </div>
           <div class="card-body">
@@ -33,7 +33,7 @@
               <i class="material-icons" :class="{ 'fa-spin': loading }">
                 refresh
               </i>
-              {{ $t('global.refresh') }}
+             Refresh
             </button>
           </div>
           <div class="card-body">
@@ -54,8 +54,6 @@
                   :HeaderSettings="false"
                   :pageSizeOptions="[10, 25, 50, 100]"
                 >
-                  <global-search :query="query" class="pull-left" />
-                  <header-settings :columns="columns" class="pull-right" />
                 </datatable>
               </div>
             </div>
@@ -72,7 +70,6 @@ import DatatableActions from '@components/Datatables/DatatableActions'
 import TranslatedHeader from '@components/Datatables/TranslatedHeader'
 import HeaderSettings from '@components/Datatables/HeaderSettings'
 import GlobalSearch from '@components/Datatables/GlobalSearch'
-import DatatableList from '@components/Datatables/DatatableList'
 
 export default {
   components: {
@@ -83,38 +80,37 @@ export default {
     return {
       columns: [
         {
-          title: 'cruds.user.fields.id',
+          title: 'ID',
           field: 'id',
           thComp: TranslatedHeader,
           sortable: true,
           colStyle: 'width: 100px;'
         },
         {
-          title: 'cruds.user.fields.name',
+          title: 'Name',
           field: 'name',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'cruds.user.fields.email',
+          title: 'Email',
           field: 'email',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'cruds.user.fields.email_verified_at',
-          field: 'email_verified_at',
+          title: 'Status',
+          field: 'status',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'cruds.user.fields.roles',
-          field: 'roles.title',
+          title: 'Roles',
+          field: 'roles',
           thComp: TranslatedHeader,
-          tdComp: DatatableList
         },
         {
-          title: 'global.actions',
+          title: 'Actions',
           thComp: TranslatedHeader,
           tdComp: DatatableActions,
           visible: true,

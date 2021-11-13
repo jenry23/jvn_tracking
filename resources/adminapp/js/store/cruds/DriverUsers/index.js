@@ -1,10 +1,9 @@
-import { result } from 'lodash'
 import * as fb from '../../../firebase'
 
 const set = key => (state, val) => {
     state[key] = val
   }
-  
+
   function initialState() {
     return {
       data: [],
@@ -13,16 +12,16 @@ const set = key => (state, val) => {
       loading: false
     }
   }
-  
+
   const route = 'driver-users'
-  
-  
+
+
   const getters = {
     data: state => state.data,
     total: state => state.total,
     loading: state => state.loading
   }
-  
+
   const actions = {
     fetchIndexData({ commit, state }) {
       commit('setLoading', true)
@@ -68,7 +67,7 @@ const set = key => (state, val) => {
       commit('resetState')
     }
   }
-  
+
   const mutations = {
     setData: set('data'),
     setTotal: set('total'),
@@ -81,7 +80,7 @@ const set = key => (state, val) => {
       Object.assign(state, initialState())
     }
   }
-  
+
   export default {
     namespaced: true,
     state: initialState,
@@ -89,4 +88,3 @@ const set = key => (state, val) => {
     actions,
     mutations
   }
-  

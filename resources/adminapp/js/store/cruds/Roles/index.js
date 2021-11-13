@@ -1,3 +1,5 @@
+import * as fb from '../../../firebase'
+
 const set = key => (state, val) => {
   state[key] = val
 }
@@ -22,11 +24,21 @@ const getters = {
 const actions = {
   fetchIndexData({ commit, state }) {
     commit('setLoading', true)
-    axios
-      .get(route, { params: state.query })
-      .then(response => {
-        commit('setData', response.data.data)
-        commit('setTotal', response.data.total)
+    var rolesData = []
+
+    fb.rolesCollection.get().then(response => {
+      response.forEach((doc) => {
+        rolesData.push({
+           id: doc.id,
+           permissions: doc.data().permissions,
+           title: doc.data().title,
+           companyID: doc.data().companyID
+         });
+      });
+      const results = rolesData;
+      const total = rolesData.length;
+      commit('setData', results)
+      commit('setTotal', total )
       })
       .catch(error => {
         message = error.response.data.message || error.message

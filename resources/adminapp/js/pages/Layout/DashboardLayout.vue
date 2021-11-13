@@ -17,6 +17,7 @@
 import DashboardContent from './Content.vue'
 import TopNavbar from './TopNavbar.vue'
 import MobileMenu from './MobileMenu.vue'
+import * as fb from '../../firebase'
 
 export default {
   components: {
@@ -26,125 +27,78 @@ export default {
   },
   data() {
     return {
-      sidebarLinks: [
+      sidebarLinks: [],
+      sidebar: [
         {
-          title: 'Dashboard',
-          icon: 'dashboard',
-          path: { name: 'dashboard' }
+          title: 'Maps',
+          icon: 'map',
+          path: { name: 'map_route.index' },
+          gate: 'maps_access'
         },
         {
           title: 'Trip Ticket',
           icon: 'local_shipping',
-          path: { name: 'trip_ticket' },
-          children: [{
-              title: 'Ticket',
-              icon: 'map',
-              path: { name: 'tickets.index' },
-            }]
-        },
-        {
-          title: 'Maps',
-          icon: 'map',
-          path: { name: 'maps' },
-          children: [{
-              title: 'Maps',
-              icon: 'map',
-              path: { name: 'map_route.index' },
-            }]
+          path: { name: 'tickets.index' },
+          gate: 'trip_ticket_access'
         },
         {
           title: 'Drivers',
           icon: 'perm_contact_calendar',
-          path: { name: 'driver' },
-          children: [{
-              title: 'Drivers',
-              icon: 'map',
-              path: { name: 'driver_users.index' },
-            }]
+          path: { name: 'driver_users.index' },   
+          gate: 'drivers_access'
         },
         {
           title: 'Passengers',
           icon: 'people',
-          path: { name: 'passenger' },
-          children: [{
-              title: 'Passenger',
-              icon: 'perm_data_setting',
-              path: { name: 'passenger_list.index' },
-            }]
+          path: { name: 'passenger_list.index' },
+          gate: 'passenger_access'
         },
         {
           title: 'Vehicles',
           icon: 'drive_eta',
-          path: { name: 'vehicle' },
-            children : [{
-                title: 'Vehicles',
-                icon: 'map',
-                path: { name: 'vehicle.index' },
-            }]
+          path: { name: 'vehicle.index' },
+          gate: 'vehicles_access'
         },
-        {
-          title: 'Location',
-          icon: 'person_pin_circle',
-          path: { name: 'location' },
-          children: [{
-              title: 'cruds.location.title',
-              icon: 'map',
-              path: { name: 'location.index' },
-            }]
-        },
-        {
-          title: 'cruds.userManagement.title',
-          icon: 'person',
-          path: { name: 'user_management' },
-          gate: 'user_management_access',
-          children: [
-            {
-              title: 'cruds.permission.title',
-              icon: 'perm_data_setting',
-              path: { name: 'permissions.index' },
-              gate: 'permission_access'
-            },
-            {
-              title: 'cruds.role.title',
-              icon: 'group',
-              path: { name: 'roles.index' },
-              gate: 'role_access'
-            },
-            {
-              title: 'cruds.user.title',
-              icon: 'person',
-              path: { name: 'users.index' },
-              gate: 'user_access'
-            }
-          ]
-        },
-        {
-          title: 'cruds.contactManagement.title',
+         {
+          title: 'User Management',
           icon: 'import_contacts',
           path: { name: 'contact_management' },
-          gate: 'contact_management_access',
+          gate: 'user_mangement_access',
           children: [
             {
-              title: 'cruds.contactCompany.title',
+              title: 'Companies',
               icon: 'fas fa-building',
               path: { name: 'contact_companies.index' },
-              gate: 'contact_company_access'
             },
             {
-              title: 'cruds.contactContact.title',
-              icon: 'fas fa-user-plus',
-              path: { name: 'contact_contacts.index' },
-              gate: 'contact_contact_access'
+              title: 'Permission',
+              icon: 'perm_data_setting',
+              path: { name: 'permissions.index' },
+            },
+            {
+              title: 'Roles',
+              icon: 'group',
+              path: { name: 'roles.index' },
+            },
+            {
+              title: 'User',
+              icon: 'person',
+              path: { name: 'users.index' },
             }
           ]
         },
         {
-          title: 'cruds.settings.title',
-          icon: 'settings',
-          path: { name: 'settings' },
-          gate: 'settings_access',
-          children: []
+          title: 'Create Routes',
+          icon: 'satellite',
+          path: { name: 'routes.index' },
+          gate: 'routes_access'
         },
+        {
+          title: 'Create Pickup Points',
+          icon: 'person_pin_circle',
+          path: { name: 'location.index' },
+          gate: 'location_access'
+        }
       ]
     }
   },
@@ -156,10 +110,55 @@ export default {
     }
   }, 
   mounted(){
+    this.getUsersRoles();
     if(this.$route.name == 'dashboard'){
       this.$sidebar.showSidebar = true;
     }else{
       this.$sidebar.showSidebar = false;
+    }
+  },
+  methods:{
+     arr_diff (a1, a2) {
+        var a = [], diff = [];
+        var result = [];
+        for (var i = 0; i < a1.length; i++) {
+          a[a1[i].gate] = i;
+        }
+       for (var i = 0; i < a2.length; i++) {
+            if (a[a2[i]]) {
+                result[i] = a1[a[a2[i]]];
+            }
+        }
+        console.log(result);
+        var filtered = result.filter(function (el) {
+          return el != null;
+        });
+        return filtered;
+    },
+    getUsersRoles()
+    {
+     fb.auth.onAuthStateChanged((user) => {
+        if (user) {
+          // User logged in already or has just logged in.
+          fb.usersCollection.doc(user.uid).get().then(response => {
+            var data = response.data();
+            if(data){
+              var roles_id = data.roles;
+              fb.rolesCollection.doc(roles_id).get().then(response =>{
+                var permissions = response.data().permissions;
+                var permissionsList = []
+                permissions.forEach(element => {
+                    permissionsList.push(element.title)
+                });
+                // var values = this.arr_diff(this.sidebar,permissionsList)
+                this.sidebarLinks = this.sidebar;
+              })
+            }
+          });
+        } else {
+          // User not logged in or has just logged out.
+        }
+      });
     }
   }
 }

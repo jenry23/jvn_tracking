@@ -8,8 +8,8 @@
               <i class="material-icons">remove_red_eye</i>
             </div>
             <h4 class="card-title">
-              {{ $t('global.view') }}
-              <strong>{{ $t('cruds.permission.title_singular') }}</strong>
+              View
+              <strong>Permissions</strong>
             </h4>
           </div>
           <div class="card-body">
@@ -23,15 +23,7 @@
                     <tbody>
                       <tr>
                         <td class="text-primary">
-                          {{ $t('cruds.permission.fields.id') }}
-                        </td>
-                        <td>
-                          {{ entry.id }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-primary">
-                          {{ $t('cruds.permission.fields.title') }}
+                          Title
                         </td>
                         <td>
                           {{ entry.title }}

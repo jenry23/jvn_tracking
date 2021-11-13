@@ -8,20 +8,19 @@
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title">
-              {{ $t('global.table') }}
-              <strong>{{ $t('cruds.role.title') }}</strong>
+              Table
+              <strong>Roles</strong>
             </h4>
           </div>
           <div class="card-body">
             <router-link
               class="btn btn-primary"
-              v-if="$can(xprops.permission_prefix + 'create')"
               :to="{ name: xprops.route + '.create' }"
             >
               <i class="material-icons">
                 add
               </i>
-              {{ $t('global.add') }}
+              Add
             </router-link>
             <button
               type="button"
@@ -33,7 +32,7 @@
               <i class="material-icons" :class="{ 'fa-spin': loading }">
                 refresh
               </i>
-              {{ $t('global.refresh') }}
+              Refresh
             </button>
           </div>
           <div class="card-body">
@@ -54,8 +53,6 @@
                   :HeaderSettings="false"
                   :pageSizeOptions="[10, 25, 50, 100]"
                 >
-                  <global-search :query="query" class="pull-left" />
-                  <header-settings :columns="columns" class="pull-right" />
                 </datatable>
               </div>
             </div>
@@ -72,7 +69,7 @@ import DatatableActions from '@components/Datatables/DatatableActions'
 import TranslatedHeader from '@components/Datatables/TranslatedHeader'
 import HeaderSettings from '@components/Datatables/HeaderSettings'
 import GlobalSearch from '@components/Datatables/GlobalSearch'
-import DatatableList from '@components/Datatables/DatatableList'
+import DatatableRoles from '@components/Datatables/DatatableRoles'
 
 export default {
   components: {
@@ -83,26 +80,26 @@ export default {
     return {
       columns: [
         {
-          title: 'cruds.role.fields.id',
-          field: 'id',
+          title:'Company ID',
+          field: 'companyID',
           thComp: TranslatedHeader,
           sortable: true,
           colStyle: 'width: 100px;'
         },
         {
-          title: 'cruds.role.fields.title',
+          title: 'Title',
           field: 'title',
           thComp: TranslatedHeader,
           sortable: true
         },
         {
-          title: 'cruds.role.fields.permissions',
-          field: 'permissions.title',
+          title: 'Permissions',
+          field: 'permissions',
           thComp: TranslatedHeader,
-          tdComp: DatatableList
+          tdComp: DatatableRoles
         },
         {
-          title: 'global.actions',
+          title: 'Actions',
           thComp: TranslatedHeader,
           tdComp: DatatableActions,
           visible: true,

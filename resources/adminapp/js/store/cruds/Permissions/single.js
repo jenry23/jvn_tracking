@@ -1,11 +1,9 @@
+import * as fb from '../../../firebase'
+
 function initialState() {
   return {
     entry: {
-      id: null,
-      title: '',
-      created_at: '',
-      updated_at: '',
-      deleted_at: ''
+      title: ''
     },
     loading: false
   }
@@ -28,10 +26,9 @@ const actions = {
         indices: true,
         booleansAsIntegers: true
       })
-      axios
-        .post(route, params)
-        .then(response => {
-          resolve(response)
+
+      fb.permissionsCollection.add(state.entry).then(response => {
+        resolve(response)
         })
         .catch(error => {
           let message = error.response.data.message || error.message
@@ -100,9 +97,9 @@ const actions = {
     })
   },
   fetchShowData({ commit, dispatch }, id) {
-    axios.get(`${route}/${id}`).then(response => {
-      commit('setEntry', response.data.data)
-    })
+    fb.permissionsCollection.doc(id).get().then(response => {
+      commit('setEntry',response.data())
+   })
   },
   resetState({ commit }) {
     commit('resetState')

@@ -1,6 +1,8 @@
 import firebase from 'firebase'
 import 'firebase/auth'
 import 'firebase/firestore'
+import "firebase/functions";
+
 
 // firebase init - add your own config here
 const firebaseConfig = {
@@ -21,8 +23,10 @@ const firebases = firebase;
 const auth = firebase.auth()
 const db_firebase = firebase.database()
 const db_storage = firebase.storage()
+// const defaultDatabase = admin.database();
 
 // collection references
+const usersCollection = db_firestore.collection('users')
 const permissionsCollection = db_firestore.collection('permissions') 
 const genderCollection = db_firestore.collection('gender') 
 const driversCollection = db_firestore.collection('drivers')
@@ -30,13 +34,18 @@ const vehiclesCollection = db_firestore.collection('vehicles')
 const ticketsCollection = db_firestore.collection('ticket')
 const locationsCollection = db_firestore.collection('locations')
 const routesCollection = db_firestore.collection('routes')
+const rolesCollection = db_firestore.collection('roles')
 const passengerCollection = db_firestore.collection('passenger')
+const tagCollection = db_firestore.collection('tag')
+const companyCollection = db_firestore.collection('company')
 // export utils/refs
 export {
   db_storage,
   db_firestore,
   auth,
+  usersCollection,
   routesCollection,
+  rolesCollection,
   firebases,
   genderCollection,
   permissionsCollection,
@@ -45,5 +54,7 @@ export {
   vehiclesCollection,
   ticketsCollection,
   locationsCollection,
-  passengerCollection
+  passengerCollection,
+  tagCollection,
+  companyCollection
 }

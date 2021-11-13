@@ -1,15 +1,15 @@
 <template>
 <div>
-  <router-link
-          class="btn btn-primary"
-          :to="{ name: xprops.route + '.create' }"
-        >
+  <router-link class="btn btn-info" :to="{ name: xprops.route + '.create' }">
     Add Trip Ticket
+  </router-link>
+    <router-link class="btn btn-primary float-right" :to="{ name: xprops.route + '.history' }">
+    History Trip Ticket
   </router-link>
   <div class="row">
   <div class="col-12" v-for="datas in data" :key="datas.id">
     <div class="card text-dark">
-      <div class="card-header" style="background-color: #228B22;">
+      <div class="card-header" style="background-color: #006400;">
    
     <i class="fa fa-university"> </i> <strong style="color:white;"> Ticket Number : {{ datas.id }}</strong>
       </div>
@@ -39,15 +39,9 @@
             </table>
                <router-link
                   class="btn btn-info"
-                  :to="{ name: xprops.route + '.show', params: { id: datas.id } }"
+                  :to="{ name: xprops.route + '.show', params: { id: datas.id,vehicle: datas.vehicleID } }"
                 >
                 Show
-               </router-link>
-                   <router-link
-                  class="btn btn-danger"
-                  :to="{ name: xprops.route + '.scan', params: { id: datas.id } }"
-                >
-                Scan
                </router-link>
           </div>
         </div>
@@ -80,13 +74,15 @@ export default {
   },
   mounted() {
     this.fetchIndexData();
+    this.AutomaticApprove();
   },
   methods: {
     ...mapActions('TicketsIndex', [
       'fetchIndexData',
       'setQuery',
+      'AutomaticApprove',
       'resetState'
-    ])
+    ]),
   }
 }
 </script>

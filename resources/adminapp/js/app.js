@@ -4,67 +4,45 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap')
+ require('./bootstrap')
 
-import Vue from 'vue';
-import moment from 'moment'
-import $ from 'jquery'
+ import Vue from 'vue';
+ import moment from 'moment'
+ import $ from 'jquery'
 
-Vue.config.productionTip = false
-window.Vue = Vue;
+ Vue.config.productionTip = false
+ window.Vue = Vue;
 
-Vue.prototype.moment = moment
-Vue.prototype.$jquery = $
-
-
-import App from './App.vue'
-
-// Core
-import router from './routes/routes'
-import store from './store/store'
-import i18n from './i18n'
-import { auth } from './firebase'
-import '../sass/app.scss'
-import registerServiceWorker from './registerServiceWorker'
-
-// Plugins
-
-import GlobalComponents from './globalComponents'
-import GlobalDirectives from './globalDirectives'
-import GlobalMixins from './mixins/global'
-
-Vue.use(GlobalComponents)
-Vue.use(GlobalDirectives)
-Vue.use(GlobalMixins)
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
- router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
-  if (requiresAuth && !auth.currentUser) {
-    next('/login')
-  }
-  else {
-    next()
-  }
-})
+ Vue.prototype.moment = moment
+ Vue.prototype.$jquery = $
 
 
+ import App from './App.vue'
 
-let app
- auth.onAuthStateChanged(() => {
-   if (!app) {
-    const app = new Vue({
-      el: '#app',
-      registerServiceWorker,
-      render: h => h(App),
-      router,
-      store,
-      i18n,
-    })
-  }
+ // Core
+ import router from './routes/routes'
+ import store from './store/store'
+ import i18n from './i18n'
+
+ import '../sass/app.scss'
+ import * as registerServiceWorker from './registerServiceWorker'
+
+ // Plugins
+
+ import GlobalComponents from './globalComponents'
+ import GlobalDirectives from './globalDirectives'
+ import GlobalMixins from './mixins/global'
+
+ Vue.use(GlobalComponents)
+ Vue.use(GlobalDirectives)
+ Vue.use(GlobalMixins)
+
+
+const app = new Vue({
+  el: '#app',
+  render: h => h(App),
+  registerServiceWorker,
+  router,
+  store,
+  i18n,
 })

@@ -9,28 +9,28 @@ function initialState() {
         qrcodeSrc: '',
       },
       loading: false
- 
+
     }
   }
-  
+
   const route = 'passenger'
-  
+
   const getters = {
     entry: state => state.entry,
     lists: state => state.lists,
     loading: state => state.loading
   }
-  
+
   const actions = {
     storeData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
-      
+
         var name = state.entry.name
         var address = state.entry.address
-        
+
         fb.passengerCollection.add({
           name : name,
           address: address,
@@ -42,13 +42,12 @@ function initialState() {
         .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
             reject(error)
           })
           .finally(() => {
@@ -70,28 +69,28 @@ function initialState() {
     updateData({ commit, state, dispatch }) {
       commit('setLoading', true)
       dispatch('Alert/resetState', null, { root: true })
-  
+
       return new Promise((resolve, reject) => {
         let params = objectToFormData(state.entry, {
           indices: true,
           booleansAsIntegers: true
         })
-        params.set('_method', 'PUT')
-        axios
-          .post(`${route}/${state.entry.id}`, params)
-          .then(response => {
-            resolve(response)
-          })
+        fb.passengerCollection.doc(state.entry.id).update({
+          name : state.entry.name,
+          address: state.entry.address,
+        }).then(response => {
+          resolve(response)
+        })
           .catch(error => {
             let message = error.response.data.message || error.message
             let errors = error.response.data.errors
-  
+
             dispatch(
               'Alert/setAlert',
               { message: message, errors: errors, color: 'danger' },
               { root: true }
             )
-  
+
             reject(error)
           })
           .finally(() => {
@@ -149,7 +148,7 @@ function initialState() {
       commit('resetState')
     }
   }
-  
+
   const mutations = {
     setEntry(state, entry) {
       state.entry = entry
@@ -200,7 +199,7 @@ function initialState() {
       state = Object.assign(state, initialState())
     }
   }
-  
+
   export default {
     namespaced: true,
     state: initialState,
@@ -208,4 +207,3 @@ function initialState() {
     actions,
     mutations
   }
-  

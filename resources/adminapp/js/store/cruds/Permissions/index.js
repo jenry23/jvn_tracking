@@ -1,3 +1,6 @@
+import * as fb from '../../../firebase'
+import * as admin from 'firebase-admin'
+
 const set = key => (state, val) => {
   state[key] = val
 }
@@ -22,11 +25,20 @@ const getters = {
 const actions = {
   fetchIndexData({ commit, state }) {
     commit('setLoading', true)
-    axios
-      .get(route, { params: state.query })
-      .then(response => {
-        commit('setData', response.data.data)
-        commit('setTotal', response.data.total)
+    let permissionsData = [];
+
+    fb.permissionsCollection.get().then(response => {
+      response.forEach((doc) => {
+        permissionsData.push({
+           id: doc.id,
+           title: doc.data().title,
+           created_at: doc.data().created_at
+         });
+      });
+      const results = permissionsData;
+      const total = permissionsData.length;
+      commit('setData', results)
+      commit('setTotal', total )
       })
       .catch(error => {
         message = error.response.data.message || error.message

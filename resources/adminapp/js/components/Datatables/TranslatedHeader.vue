@@ -1,6 +1,6 @@
 <template>
   <span>
-    {{ $t(title) }}
+    {{ this.title }}
   </span>
 </template>
 

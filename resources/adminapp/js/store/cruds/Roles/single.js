@@ -1,15 +1,15 @@
+import * as fb from '../../../firebase'
+
 function initialState() {
   return {
     entry: {
-      id: null,
       title: '',
       permissions: [],
-      created_at: '',
-      updated_at: '',
-      deleted_at: ''
+      companyID: [],
     },
     lists: {
-      permissions: []
+      permissions: [],
+      companyID:[]
     },
     loading: false
   }
@@ -33,10 +33,13 @@ const actions = {
         indices: true,
         booleansAsIntegers: true
       })
-      axios
-        .post(route, params)
-        .then(response => {
-          resolve(response)
+      var dataList = {
+        companyID: state.entry.companyID.id,
+        title: state.entry.title,
+        permissions: state.entry.permissions
+      }
+      fb.rolesCollection.doc(state.entry.title).set(dataList).then(response => {
+        resolve(response)
         })
         .catch(error => {
           let message = error.response.data.message || error.message
@@ -90,6 +93,9 @@ const actions = {
   setTitle({ commit }, value) {
     commit('setTitle', value)
   },
+  setCompanyID({ commit }, value) {
+    commit('setCompanyID', value)
+  },
   setPermissions({ commit }, value) {
     commit('setPermissions', value)
   },
@@ -103,8 +109,30 @@ const actions = {
     commit('setDeletedAt', value)
   },
   fetchCreateData({ commit }) {
-    axios.get(`${route}/create`).then(response => {
-      commit('setLists', response.data.meta)
+    var permissionList = []
+    var companyList = []
+
+    fb.permissionsCollection.get().then(response => {
+      response.forEach((doc) => {
+        permissionList.push({
+          id: doc.id,
+          title: doc.data().title,
+        });
+      });
+    })
+
+    fb.companyCollection.get().then(response =>{
+      response.forEach((doc) => {
+        companyList.push({
+            id:doc.id,
+            company_name: doc.data().company_name
+          })
+        })
+      const lists = {
+        companyID : companyList,
+        permissions: permissionList
+      }
+      commit('setLists', lists)
     })
   },
   fetchEditData({ commit, dispatch }, id) {
@@ -126,6 +154,9 @@ const actions = {
 const mutations = {
   setEntry(state, entry) {
     state.entry = entry
+  },
+  setCompanyID(state,value){
+    state.entry.companyID = value
   },
   setTitle(state, value) {
     state.entry.title = value
