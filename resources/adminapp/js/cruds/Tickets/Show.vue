@@ -7,6 +7,7 @@
 <template>
 <div class="row">
   <div class="col-md-8">
+      <div id="map"></div>
     <GmapMap
       :center='center'
       ref="mapRef"

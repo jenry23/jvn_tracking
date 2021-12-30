@@ -10,7 +10,7 @@
   <div class="col-12" v-for="datas in data" :key="datas.id">
     <div class="card text-dark">
       <div class="card-header" style="background-color: #006400;">
-   
+
     <i class="fa fa-university"> </i> <strong style="color:white;"> Ticket Number : {{ datas.id }}</strong>
       </div>
       <div class="card-body">
@@ -34,7 +34,7 @@
                   <th>Status :</th>
                   <td>{{ datas.status }}</td>
                 </tr>
-                
+
               </tbody>
             </table>
                <router-link
@@ -43,6 +43,19 @@
                 >
                 Show
                </router-link>
+               <router-link
+                  class="btn btn-primary"
+                  :to="{ name: xprops.route + '.scan', params: { id: datas.id,vehicle: datas.vehicleID } }"
+                >
+                Scan
+               </router-link>
+                <router-link
+                  class="btn btn-primary"
+                  :to="{ name: xprops.route + '.locations', params: { id: datas.id } }"
+                >
+                Start Locations
+               </router-link>
+
           </div>
         </div>
       </div>

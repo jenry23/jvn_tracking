@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-         <div id="app">
+         <div id="app" class="full-screen-map">
             <GoogleMap />
         </div>
       </div>

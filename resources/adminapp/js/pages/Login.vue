@@ -13,7 +13,7 @@
                             <center>
                                 <h3>JVN Consultancy And Genereal Services</h3>
                                 </center>
-                               
+
 
                                 <div class="bmd-form-group">
                                     <div class="input-group">
@@ -46,9 +46,10 @@
                                     </label>
                                 </div>
                             </div>
+                            <br>
                             <div class="card-footer justify-content-center flex-column">
                               <vue-button-spinner
-                                class="btn-primary"
+                                class="btn-success btn-md"
                                 :status="status"
                                 :isLoading="loading"
                                 :disabled="loading"
@@ -127,7 +128,7 @@ export default {
           this.$router.push({ name: 'dashboard' })
           this.$eventHub.$emit('login-success')
         })
-        
+
         .catch(error => {
           console.log(error)
           this.status1 = true;

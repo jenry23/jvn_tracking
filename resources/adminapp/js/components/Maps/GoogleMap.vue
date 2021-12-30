@@ -1,107 +1,135 @@
 <style>
 .modal {
-  min-width: 300px;
+    min-width: 300px;
 }
 @media (min-width: 992px) {
-  .modal-xl {
-    max-width: 800px;
-  }
+    .modal-xl {
+        max-width: 800px;
+    }
 }
 @media (min-width: 1200px) {
-  .modal-xl {
-    max-width: 1140px;
-  }
+    .modal-xl {
+        max-width: 1140px;
+    }
 }
 .modal-footer {
-  padding: 15px 0px 0px 0px;
-  border-top: 1px solid #e5e5e5;
-  margin-left: -14px;
-  margin-right: -14px;
+    padding: 15px 0px 0px 0px;
+    border-top: 1px solid #e5e5e5;
+    margin-left: -14px;
+    margin-right: -14px;
 }
 .anyClass {
-  height:300px;
-  overflow-y: scroll;
+    height: 300px;
+    overflow-y: scroll;
 }
 </style>
 <template>
-  <div>
-      <button
-          type="button"
-          class="btn btn-default"
-          @click="fetchMap"
+    <div>
+        <button
+            type="button"
+            class="btn btn-default maps-refresh"
+            @click="fetchMap"
         >
-          <i class="material-icons" >
-            refresh
-          </i>
-          Refresh
-        </button> 
-      <Modal v-model="showModal" :title="title" modal-class="modal-xl">
-        <div class="row">
-          <div class="col-md-4">
-              <div class="card">
-                <div class="card-header" style="background-color: rgb(34, 139, 34);">
-                      <i class="fa fa-university"></i><strong style="color: white;"> Navigation Maps</strong>
-                </div>
-                <div class="card-body">
-                      <div id="panel" class="anyClass"></div>
-                  </div>
-                  </div>
-
-                <div class="card">
-                <div class="card-header" style="background-color: rgb(34, 139, 34);">
-                      <i class="fa fa-university"></i><strong style="color: white;"> Passenger List</strong>
-                </div>
-                  <div class="anyClass">
-                    <div class="card-body " v-for="datas in passenger" :key="datas.id">
-                    <div v-if="datas.pickup == true" >
-                        <b>{{datas.name}}</b> - <i class="material-icons" style="color:green;">check</i>
-                      </div>
-                      <div v-else>
-                        <b>{{datas.name}}</b> - <i class="material-icons" style="color:red;">block</i>
-                      </div>
+            <i class="material-icons"> refresh </i>
+            Refresh
+        </button>
+        <Modal v-model="showModal" :title="title" modal-class="modal-xl">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div
+                            class="card-header"
+                            style="background-color: rgb(34, 139, 34)"
+                        >
+                            <i class="fa fa-university"></i
+                            ><strong style="color: white">
+                                Navigation Maps</strong
+                            >
+                        </div>
+                        <div class="card-body">
+                            <div id="panel" class="anyClass"></div>
+                        </div>
                     </div>
-                  </div>
-                </div>
-          </div>
 
-        <div class="col-md-8">
-            <gmap-map
-              :center='one_center'
-              :zoom='18'
-              style='width:100%;  height: 800px;'
-            >
-          <DirectionsRenderer :origin="this.one_center" :destination="this.destination" :waypoints="this.waypts" travelMode="DRIVING"/>
-            </gmap-map>
+                    <div class="card">
+                        <div
+                            class="card-header"
+                            style="background-color: rgb(34, 139, 34)"
+                        >
+                            <i class="fa fa-university"></i
+                            ><strong style="color: white">
+                                Passenger List</strong
+                            >
+                        </div>
+                        <div class="anyClass">
+                            <div
+                                class="card-body"
+                                v-for="datas in passenger"
+                                :key="datas.id"
+                            >
+                                <div v-if="datas.pickup == true">
+                                    <b>{{ datas.name }}</b> -
+                                    <i
+                                        class="material-icons"
+                                        style="color: green"
+                                        >check</i
+                                    >
+                                </div>
+                                <div v-else>
+                                    <b>{{ datas.name }}</b> -
+                                    <i class="material-icons" style="color: red"
+                                        >block</i
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <gmap-map
+                        :center="one_center"
+                        :zoom="18"
+                        style="width: 100%; height: 800px"
+                    >
+                        <DirectionsRenderer
+                            :origin="this.one_center"
+                            :destination="this.destination"
+                            :waypoints="this.waypts"
+                            travelMode="DRIVING"
+                        />
+                    </gmap-map>
+                </div>
             </div>
-        </div>
-      </Modal>
-    <gmap-map
-      :center='this.center'
-      :zoom='15'  
-      ref="mapRef"
-      style='width:100%;  height: 800px;'
-    >
-      <gmap-marker
-        :key="index"
-        v-for="(m, index) in markers"
-        :options="{
-          preserveViewport:true
-        }"
-        :position="m.position"
-        @click="toggleInfoWindow(m, index)"
-      />
-       
-       <div v-for="(m, index) in markers" :key="index">
-      <gmap-info-window
-        :options="infoOptions"
-        :position="m.position"
-      >
-      <div v-html="infoContent=m.name"></div>
-      </gmap-info-window>
-       </div>
-    </gmap-map>
-    
-  </div>
+        </Modal>
+        <gmap-map
+            :center="this.center"
+            :zoom="15"
+            :options="{
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false,
+            }"
+            ref="mapRef"
+            style="width: 100%; height: 800px"
+        >
+            <gmap-marker
+                :key="index"
+                v-for="(m, index) in markers"
+                :options="{
+                    preserveViewport: true,
+                }"
+                :position="m.position"
+                @click="toggleInfoWindow(m, index)"
+            />
+
+            <div v-for="(m, index) in markers" :key="index">
+                <gmap-info-window :options="infoOptions" :position="m.position">
+                    <div v-html="(infoContent = m.name)"></div>
+                </gmap-info-window>
+            </div>
+        </gmap-map>
+    </div>
 </template>
 
 
@@ -120,7 +148,7 @@ export default {
     return {
       center: { lat: 14.184794666666667, lng: 121.283092 },
       one_center: { lat: 0, lng: 0 },
-      waypts : [], 
+      waypts : [],
       destination: { lat: 0, lng: 0},
       passenger: [],
       currentPlace: null,
@@ -182,18 +210,18 @@ export default {
           })
           self.markers = marker
       })
-        // if(this.$refs.mapRef){
-        //     this.$refs.mapRef.$mapPromise.then((map) => {
-              
-        //     const trafficLayer = new google.maps.TrafficLayer();
-        //     trafficLayer.setMap(map)
-        //     const bounds = new google.maps.LatLngBounds()
-        //         for (let m of this.markers) {
-        //           bounds.extend(m.position)
-        //         }
-        //         map.fitBounds(bounds);
-        //     });
-        //   }
+        if(this.$refs.mapRef){
+            this.$refs.mapRef.$mapPromise.then((map) => {
+
+            const trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map)
+            const bounds = new google.maps.LatLngBounds()
+                for (let m of this.markers) {
+                  bounds.extend(m.position)
+                }
+                map.fitBounds(bounds);
+            });
+          }
     },
     toggleInfoWindow: function (marker, idx) {
       this.showModal = true;
@@ -231,9 +259,9 @@ export default {
                 lat: latitude,
                 lng: longitude,
               };
-        }); 
+        });
         fb.ticketsCollection.doc(route).onSnapshot(response => {
-        var passengerList = response.data().passengerID; 
+        var passengerList = response.data().passengerID;
         var routeID = response.data().routeID;
         fb.routesCollection.doc(routeID).onSnapshot((response) => {
           var routeList = response.data();
@@ -265,4 +293,4 @@ export default {
     },
   },
 };
-</script>   
+</script>

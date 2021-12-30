@@ -19,6 +19,7 @@ import VueCookies from 'vue-cookies';
 import VueModal from '@kouts/vue-modal'
 import JsonExcel from "vue-json-excel";
 import VueTimepicker from 'vue2-timepicker'
+import VueQrcodeReader from "vue-qrcode-reader";
 
 const GlobalComponents = {
   install(Vue) {
@@ -26,7 +27,7 @@ const GlobalComponents = {
       update (el) {
         const sourceValue = el.value.replace(/\s+/g, '-');
         const newValue = sourceValue.toUpperCase();
-    
+
         if (sourceValue !== newValue) {
           el.value = newValue;
           el.dispatchEvent(new Event('input', { bubbles: true }));
@@ -42,6 +43,7 @@ const GlobalComponents = {
     Vue.use(EventHub)
     Vue.component('datetime', Datetime);
     Vue.use(Datatable)
+    Vue.use(VueQrcodeReader);
     Vue.use(VueGoogleMaps, {
       load: {
         key: 'AIzaSyAAOK_-ogfS6sfQoQNmqVDzDcaGNe3S0GA',

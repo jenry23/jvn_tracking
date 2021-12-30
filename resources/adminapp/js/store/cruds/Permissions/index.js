@@ -1,5 +1,4 @@
 import * as fb from '../../../firebase'
-import * as admin from 'firebase-admin'
 
 const set = key => (state, val) => {
   state[key] = val

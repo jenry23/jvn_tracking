@@ -16778,7 +16778,7 @@ label {
 .card.bg-primary,
 .card.card-rotate.bg-primary .front,
 .card.card-rotate.bg-primary .back {
-  background: linear-gradient(60deg, #ab47bc, #8e24aa);
+  background: linear-gradient(60deg, #00AAA0, #8ED2C9);
 }
 
 .card .card-header-info .card-icon,
@@ -18820,4 +18820,9 @@ Copyright (c) 2015 Daniel Eden
   }
 }
 
+@media screen and (max-width: 375px) and (max-width: 767px) {
+  .mobile-responsive-header {
+    display: none !important;
+  }
+}
 /*# sourceMappingURL=dashboard-free.css.map */

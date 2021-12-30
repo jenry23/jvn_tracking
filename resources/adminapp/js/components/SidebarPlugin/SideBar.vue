@@ -9,7 +9,6 @@
       <a href="/" class=" logo-normal">
       <center>
         <img class="img-fluid" src="/images/logo_jvn.png">
-        <h3 style="color:white;">JVN Tracking System</h3>
         </center>
       </a>
     </div>

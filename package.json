@@ -24,7 +24,7 @@
     "vue-cookies": "^1.7.4",
     "vue-datetime": "*",
     "vue-json-excel": "^0.3.0",
-    "vue-qr-reader": "^1.6.2",
+    "vue-qrcode-reader": "^3.1.0",
     "vue-qriously": "^1.1.1",
     "vue-uuid": "^2.0.2",
     "vue2-datepicker": "^3.9.0",

@@ -47,12 +47,6 @@ const routes = [
             meta: { title: 'Ticket' }
           },
           {
-            path: 'tickets/:vehicle/:id',
-            name: 'tickets.show',
-            component: () => import('@cruds/Tickets/Show.vue'),
-            meta: { title: 'Ticket' }
-          },
-          {
             path: 'tickets/:id/edit',
             name: 'tickets.edit',
             component: () => import('@cruds/Tickets/Edit.vue'),
@@ -70,6 +64,19 @@ const routes = [
             component: () => import('@cruds/Tickets/Scan.vue'),
             meta: { title: 'Ticket' }
           },
+          {
+            path: 'tickets/:id/locations',
+            name: 'tickets.locations',
+            component: () => import('@cruds/Tickets/Location.vue'),
+            meta: { title: 'Ticket' }
+          },
+          {
+            path: 'tickets/:vehicle/:id',
+            name: 'tickets.show',
+            component: () => import('@cruds/Tickets/Show.vue'),
+            meta: { title: 'Ticket' }
+          },
+
         ]
       },
       {

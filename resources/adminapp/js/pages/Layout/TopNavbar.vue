@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top"
+    class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top mobile-responsive-header"
   >
     <div class="container-fluid">
       <div class="navbar-wrapper">
