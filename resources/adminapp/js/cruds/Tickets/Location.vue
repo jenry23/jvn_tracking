@@ -141,7 +141,7 @@ export default {
             const cameraOptions = {
                 tilt: 0,
                 heading: 0,
-                zoom: 12,
+                zoom: 15,
                 center: this.center,
             };
             this.$refs.mapRef.$mapPromise.then((map) => {
