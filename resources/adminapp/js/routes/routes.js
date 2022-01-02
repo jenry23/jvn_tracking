@@ -59,7 +59,7 @@ const routes = [
             meta: { title: 'Ticket' }
           },
           {
-            path: 'tickets/:id/scan',
+            path: 'tickets/:id/:status/scan',
             name: 'tickets.scan',
             component: () => import('@cruds/Tickets/Scan.vue'),
             meta: { title: 'Ticket' }
@@ -71,7 +71,13 @@ const routes = [
             meta: { title: 'Ticket' }
           },
           {
-            path: 'tickets/:vehicle/:id',
+            path: 'tickets/:id/passenger',
+            name: 'tickets.passenger',
+            component: () => import('@cruds/Tickets/Passenger.vue'),
+            meta: { title: 'Ticket' }
+          },
+          {
+            path: 'tickets/:vehicle/:id/show',
             name: 'tickets.show',
             component: () => import('@cruds/Tickets/Show.vue'),
             meta: { title: 'Ticket' }

@@ -1,0 +1,19 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-b6cef4d4"],{"11bb":function(e,t,n){},"8bf9":function(e,t,n){"use strict";n.r(t);var s=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{ref:"wrapper",class:{fullscreen:e.fullscreen},on:{fullscreenchange:e.onFullscreenChange}},[n("qrcode-stream",{attrs:{track:this.paintBoundingBox},on:{decode:e.onDecode,init:e.onInit}},[n("back-button")],1)],1)},r=[],c=n("2f62"),u=n("aeac"),o=n("cc84"),i="firebase",l="8.6.4";
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+o["default"].registerVersion(i,l,"app"),o["default"].SDK_VERSION=l;var a={data(){return{camera:"auto",fullscreen:!0,result:null,showScanConfirmation:!1,xprops:{module:"TicketsIndex",route:"tickets",permission_prefix:"tickets_"}}},beforeDestroy(){this.resetState()},computed:{...Object(c["c"])("TicketsIndex",["data","total","loading"]),fullscreenIcon(){return this.fullscreen?"/fullscreen-exit.svg":"/fullscreen.svg"}},watch:{fullscreen(e){e?this.requestFullscreen():this.exitFullscreen()}},mounted(){var e=this.$route.params.id;u["m"].doc(e);u["m"].doc(e).get().then(e=>{})},methods:{...Object(c["b"])("TicketsIndex",["setQuery","resetState"]),paintBoundingBox(e,t){for(const n of e){const{boundingBox:{x:e,y:s,width:r,height:c}}=n;t.lineWidth=2,t.strokeStyle="#007bff",t.strokeRect(e,s,r,c)}},codeScanned(e){this.scanned=e;var t=this.$route.params.id,n=u["m"].doc(t);u["m"].doc(t).get().then(t=>{var s=t.data().passengerID,r=this.searchStringInArray(e,s);if(r)if(0==r.pickup||""==r.pickup){var c=new Date,u=c.getHours()+":"+c.getMinutes();n.update({passengerID:s.filter(e=>e.id!==r.id)}),n.update({passengerID:o["default"].firestore.FieldValue.arrayUnion({name:r.name,id:r.id,pickup:!0,start_time:u})})}else this.$swal({title:"You are Already Scanned",text:doc.name,type:"warning",showCancelButton:!0,focusCancel:!0,reverseButtons:!0,confirmButtonText:"OK",confirmButtonColor:"#dd4b39"});else this.$swal({title:"You are not Register in this Van",type:"warning",showCancelButton:!0,focusCancel:!0,reverseButtons:!0,confirmButtonText:"OK",confirmButtonColor:"#dd4b39"})})},async onInit(e){try{await e}catch(t){console.error(t)}finally{this.showScanConfirmation="off"===this.camera}},async onDecode(e){this.result=e,this.codeScanned(e),this.pause(),await this.timeout(8e3),this.unpause()},unpause(){this.camera="auto"},pause(){this.camera="off"},timeout(e){return new Promise(t=>{window.setTimeout(t,e)})},onFullscreenChange(e){this.fullscreen=null!==document.fullscreenElement},searchStringInArray(e,t){for(var n=0;n<t.length;n++)if(t[n].id.match(e))return t[n];return-1},requestFullscreen(){const e=this.$refs.wrapper;e.requestFullscreen?e.requestFullscreen():e.mozRequestFullScreen?e.mozRequestFullScreen():e.webkitRequestFullscreen?e.webkitRequestFullscreen():e.msRequestFullscreen&&e.msRequestFullscreen()},exitFullscreen(){document.exitFullscreen?document.exitFullscreen():document.mozCancelFullScreen?document.mozCancelFullScreen():document.webkitExitFullscreen?document.webkitExitFullscreen():document.msExitFullscreen&&document.msExitFullscreen()}}},d=a,f=(n("9098"),n("2877")),m=Object(f["a"])(d,s,r,!1,null,"28328e32",null);t["default"]=m.exports},9098:function(e,t,n){"use strict";n("11bb")}}]);
+//# sourceMappingURL=chunk-b6cef4d4.644484bc.js.map

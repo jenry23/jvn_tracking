@@ -4,14 +4,14 @@
         ref="wrapper"
         @fullscreenchange="onFullscreenChange"
     >
-
-        <qrcode-stream @decode="onDecode" @init="onInit" :track="this.paintBoundingBox">
-            <div v-show="showScanConfirmation" class="scan-confirmation"> -->
-                <img :src="'/checkmark.svg'" alt="Checkmark" width="128px" />
-            </div>
-            <button @click="fullscreen = !fullscreen" class="fullscreen-button">
-                <img :src="fullscreenIcon" alt="toggle fullscreen" />
-            </button>
+        <qrcode-stream
+            @decode="onDecode"
+            @init="onInit"
+            :track="this.paintBoundingBox"
+        >
+            <back-button></back-button>
+            <!-- <button @click="back" class="fullscreen-button">back
+            </button> -->
         </qrcode-stream>
     </div>
 </template>
@@ -59,83 +59,77 @@ export default {
         },
     },
 
-    mounted() {
-        this.fetchIndexData();
-    },
     methods: {
-        ...mapActions("TicketsIndex", [
-            "fetchIndexData",
-            "setQuery",
-            "resetState",
-        ]),
-        paintBoundingBox (detectedCodes, ctx) {
-          for (const detectedCode of detectedCodes) {
-            const { boundingBox: { x, y, width, height } } = detectedCode
+        ...mapActions("TicketsIndex", ["setQuery", "resetState"]),
+        paintBoundingBox(detectedCodes, ctx) {
+            for (const detectedCode of detectedCodes) {
+                const {
+                    boundingBox: { x, y, width, height },
+                } = detectedCode;
 
-            ctx.lineWidth = 2
-            ctx.strokeStyle = '#007bff'
-            ctx.strokeRect(x, y, width, height)
-          }
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#007bff";
+                ctx.strokeRect(x, y, width, height);
+            }
         },
         codeScanned(code) {
-          this.scanned = code;
-          var id = this.$route.params.id;
-          var ticketRef = fb.ticketsCollection.doc(id);
-          fb.ticketsCollection.doc(id).get().then(response=>{
-            var passengerID  = response.data().passengerID;
-            passengerID.forEach((doc)=>{
-              if(code == doc.id){
-                if(doc.pickup == false || doc.pickup == '')
-                    {
-                      ticketRef.update({
-                            passengerID: firebase.firestore.FieldValue.arrayUnion({
-                              name:doc.name,
-                              id:doc.id,
-                              pickup:true
-                            })
-                      });
+            this.scanned = code;
+            var id = this.$route.params.id;
+            var status = this.$route.params.status;
+            var ticketRef = fb.ticketsCollection.doc(id);
 
-                      this.$swal({
+            ticketRef.get().then((response) => {
+                var passengerID = response.data().passengerID;
+                var value = this.searchStringInArray(code, passengerID);
+                if (value.start_time && status == "pickup") {
+                    this.$swal({
+                        title: "You are Already Scanned To Pickup Time",
+                        text: value.name,
+                        type: "warning",
+                        showCancelButton: true,
+                        focusCancel: true,
+                        reverseButtons: true,
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#dd4b39",
+                    });
+                } else if (value.end_time && status == "dropoff") {
+                    this.$swal({
+                        title: "You are Already Scanned To Dropoff Time",
+                        text: value.name,
+                        type: "warning",
+                        showCancelButton: true,
+                        focusCancel: true,
+                        reverseButtons: true,
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#dd4b39",
+                    });
+                } else {
+                    var today = new Date();
+                    var time = today.getHours() + ":" + today.getMinutes();
+                    ticketRef.update({
+                        passengerID: passengerID.filter(
+                            (passenger) => passenger.id !== value.id
+                        ),
+                    });
+                    ticketRef.update({
+                        passengerID: firebase.firestore.FieldValue.arrayUnion({
+                            name: value.name,
+                            id: value.id,
+                            pickup: true,
+                            start_time: status == "pickup" ? time : value.start_time,
+                            end_time: status == "dropoff" ? time : value.end_time,
+                        }),
+                    });
+                     this.$swal({
                         title: 'Successfully Updated',
-                        text: doc.name,
+                        text: value.name,
                         type: 'info',
                         showCancelButton: true,
                         focusCancel: true,
                         reverseButtons: true
                       })
-              }else if(doc.pickup == true){
-                  this.$swal({
-                        title: 'You are Already Scanned',
-                        text: doc.name,
-                        type: 'warning',
-                        showCancelButton: true,
-                        focusCancel: true,
-                        reverseButtons: true,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#dd4b39',
-                      })
-                    const removeArray = {
-                      name:doc.name,
-                      id:doc.id,
-                      pickup:false
-                    }
-                    ticketRef.update({
-                          passengerID: firebase.firestore.FieldValue.arrayRemove(removeArray),
-                    });
-                }else{
-                  this.$swal({
-                    title: 'You are not Register in this Van',
-                    type: 'warning',
-                    showCancelButton: true,
-                    focusCancel: true,
-                    reverseButtons: true,
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#dd4b39',
-                  })
                 }
-              }
             });
-          });
         },
         async onInit(promise) {
             try {
@@ -151,7 +145,7 @@ export default {
             this.result = content;
             this.codeScanned(content);
             this.pause();
-            await this.timeout(5000);
+            await this.timeout(8000);
             this.unpause();
         },
 
@@ -175,7 +169,21 @@ export default {
 
             this.fullscreen = document.fullscreenElement !== null;
         },
-
+        searchStringInArray(str, strArray) {
+            for (var j = 0; j < strArray.length; j++) {
+                if (strArray[j].id.match(str)) return strArray[j];
+            }
+            this.$swal({
+                title: "You are not Register in this Van",
+                type: "warning",
+                showCancelButton: true,
+                focusCancel: true,
+                reverseButtons: true,
+                confirmButtonText: "OK",
+                confirmButtonColor: "#dd4b39",
+            });
+            return false;
+        },
         requestFullscreen() {
             const elem = this.$refs.wrapper;
 

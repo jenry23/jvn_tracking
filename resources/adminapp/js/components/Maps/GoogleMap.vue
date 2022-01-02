@@ -192,10 +192,6 @@ export default {
               var key = data.key;
               var obj = data.val();
               if(obj.latitude != 0){
-              var position = {
-                  lat:obj.latitude,
-                  lng:obj.longitude
-              };
               // self.infoWindowPos = position;
               // console.log(key)
               // self.infoContent = self.getInfoWindowContent(key);
@@ -210,18 +206,18 @@ export default {
           })
           self.markers = marker
       })
-        if(this.$refs.mapRef){
-            this.$refs.mapRef.$mapPromise.then((map) => {
+        // if(this.$refs.mapRef){
+        //     this.$refs.mapRef.$mapPromise.then((map) => {
 
-            const trafficLayer = new google.maps.TrafficLayer();
-            trafficLayer.setMap(map)
-            const bounds = new google.maps.LatLngBounds()
-                for (let m of this.markers) {
-                  bounds.extend(m.position)
-                }
-                map.fitBounds(bounds);
-            });
-          }
+        //     const trafficLayer = new google.maps.TrafficLayer();
+        //     trafficLayer.setMap(map)
+        //     const bounds = new google.maps.LatLngBounds()
+        //         for (let m of this.markers) {
+        //           bounds.extend(m.position)
+        //         }
+        //         map.fitBounds(bounds);
+        //     });
+        //   }
     },
     toggleInfoWindow: function (marker, idx) {
       this.showModal = true;

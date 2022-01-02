@@ -48,8 +48,9 @@ const GlobalComponents = {
       load: {
         key: 'AIzaSyAAOK_-ogfS6sfQoQNmqVDzDcaGNe3S0GA',
         libraries: 'places',
-        v: 'beta'
-      }
+        v: 'beta',
+      },
+      installComponents: true
     });
     Vue.use(VueSweetalert2)
     Vue.component('vue-timepicker',VueTimepicker);

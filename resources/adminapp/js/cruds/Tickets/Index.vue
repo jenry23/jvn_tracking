@@ -43,12 +43,12 @@
                 >
                 Show
                </router-link>
-               <router-link
+               <!-- <router-link
                   class="btn btn-primary"
                   :to="{ name: xprops.route + '.scan', params: { id: datas.id,vehicle: datas.vehicleID } }"
                 >
                 Scan
-               </router-link>
+               </router-link> -->
                 <router-link
                   class="btn btn-primary"
                   :to="{ name: xprops.route + '.locations', params: { id: datas.id } }"

@@ -98,8 +98,8 @@
                       :closeOnSelect="false"
                       multiple
                       @input="updateRoles"
-                      @search.focus="focusField('roles')"
-                      @search.blur="clearFocus"
+                      @focus="focusField('roles')"
+                      @blur="clearFocus"
                     />
                   </div>
                 </div>

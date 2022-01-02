@@ -27,7 +27,7 @@ export default MapElementFactory({
       () => {
         let { origin, destination,waypoints, travelMode } = this;
         if (!origin || !destination || !waypoints || !travelMode) return;
-      
+
       function makeMarker(position, icon, title) {
         new google.maps.Marker({
             position: position,
@@ -35,34 +35,10 @@ export default MapElementFactory({
             title: title
         });
       }
-      var directions = new google.maps.DirectionsRenderer({suppressMarkers: true});
-
-      var icons = {
-          start: new google.maps.MarkerImage(
-          // URL
-          'http://maps.google.com/mapfiles/ms/micons/blue.png',
-          // (width,height)
-          new google.maps.Size(44, 32),
-          // The origin point (x,y)
-          new google.maps.Point(0, 0),
-          // The anchor point (x,y)
-          new google.maps.Point(22, 32)),
-          end: new google.maps.MarkerImage(
-          // URL
-          'http://maps.google.com/mapfiles/ms/micons/green.png',
-          // (width,height)
-          new google.maps.Size(44, 32),
-          // The origin point (x,y)
-          new google.maps.Point(0, 0),
-          // The anchor point (x,y)
-          new google.maps.Point(22, 32))
-      };
-  
         directionsRenderer.setOptions({
           preserveViewport : true
         });
         directionsRenderer.setPanel(document.getElementById('panel'));
-   
         directionsService.route(
           {
             origin,
@@ -75,15 +51,11 @@ export default MapElementFactory({
           (response, status) => {
             if (status !== "OK");
             directionsRenderer.setDirections(response);
-            var leg = response.routes[0].legs[0];
-            console.log(leg.start_location);
-            makeMarker(leg.start_location, icons.start, "title");
-            makeMarker(leg.end_location, icons.end, 'title');
           }
         );
 
       }
     );
   }
-  
+
 });

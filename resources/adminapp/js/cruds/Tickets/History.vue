@@ -9,7 +9,7 @@
     <h4 class="card-title">
       History
       <strong>Ticket</strong>
-    </h4> 
+    </h4>
     <back-button></back-button>
       <download-excel
       class="btn btn-primary float-right"
@@ -26,11 +26,11 @@
     <button @click="annual" class="btn btn-warning">Annual</button>
     <h3>{{ title }}</h3>
   <div class="row">
-    
+
   <div class="col-12" v-for="datas in data" :key="datas.id">
     <div class="card text-dark">
       <div class="card-header" style="background-color: #006400;">
-   
+
     <i class="fa fa-university"> </i> <strong style="color:white;"> Ticket Number : {{ datas.id }}</strong>
       </div>
       <div class="card-body">
@@ -82,14 +82,6 @@
               </table>
           </div>
           <div class="5">
-            <GmapMap
-              :center='center'
-              ref="mapRef"
-              :zoom='18'
-              style='width:100%;  height: 800px;'
-            >
-              <DirectionsRenderer :origin="this.center" :destination="this.destination" :waypoints="this.waypts" travelMode="DRIVING"/>
-            </GmapMap>
           </div>
         </div>
       </div>
@@ -103,6 +95,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import DirectionsRenderer from '@components/Maps/DirectionsRenderer';
 import {gmapApi} from 'vue2-google-maps'
+import * as fb from "../../firebase";
 
 export default {
   components:{
@@ -181,11 +174,11 @@ export default {
           this.$store
             .dispatch(this.xprops.module + '/approveAdmin', id)
             .then(result => {
-                this.$swal({  
-                   type: 'primary',  
-                   title: 'Succesfully',  
+                this.$swal({
+                   type: 'primary',
+                   title: 'Succesfully',
                    text: 'Approved By Admin'
-               });  
+               });
             })
         }
       })
@@ -203,9 +196,9 @@ export default {
                 lat: latitude,
                 lng: longitude,
               };
-        }); 
+        });
         fb.ticketsCollection.doc(id).onSnapshot(response => {
-        var passengerList = response.data().passengerID; 
+        var passengerList = response.data().passengerID;
         var routeID = response.data().routeID;
         fb.routesCollection.doc(routeID).onSnapshot((response) => {
           var routeList = response.data();
@@ -241,7 +234,7 @@ export default {
             const trafficLayer = new google.maps.TrafficLayer();
              trafficLayer.setMap(map)
            })
-    } 
+    }
   }
 }
 </script>
